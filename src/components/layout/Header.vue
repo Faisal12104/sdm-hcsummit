@@ -1,7 +1,7 @@
 <template>
   <header class="app-header">
     <div class="header-content">
-      <img src="@/assets/images/logo-migas.png" alt="Logo PPSDM MIGAS" class="logo">
+      <img src="@/assets/logo_ppsdmmigas.png" alt="Logo PPSDM MIGAS" class="logo">
       <div class="header-title">
         <h1>BLU PROMiSe</h1>
         <p>Metering System Oil & Gas</p>
