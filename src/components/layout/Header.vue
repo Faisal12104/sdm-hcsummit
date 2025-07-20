@@ -2,29 +2,52 @@
   <header class="app-header">
     <div class="header-content">
       <img src="@/assets/logo_ppsdmmigas.png" alt="Logo PPSDM MIGAS" class="logo">
-      <div class="header-title">
-        <h1>BLU PROMiSe</h1>
-        <p>Metering System Oil & Gas</p>
+      <div class="navigation">
+        <nav>
+          <ul>
+            <li>HOME</li>
+            <li>ABOUT US</li>
+            <li>PRODUCT</li>
+            <li>CONSULTATION</li>
+          </ul>
+        </nav>
       </div>
-      <div class="header-date">
-        <p>PPSDM MIGAS 4-6 Mei 2021</p>
-      </div>
+      <div class="login-dropdown">
+    <button class="login-button"@click="toggleDropdown">
+      LOGIN <span class="arrow">▼</span>
+    </button>
+    <ul v-if="isOpen" class="dropdown-menu">
+      <li>SUPERADMIN</li>
+      <li>ADMIN SEKTOR</li>
+      <li>ADMIN EKSTERNAL</li>
+    </ul>
+  </div>
     </div>
   </header>
 </template>
 
 <script>
 export default {
-  name: 'AppHeader'
-}
+  name: 'AppHeader',
+  data() {
+    return {
+      isOpen: false,
+    };
+  },
+  methods: {
+    toggleDropdown() {
+      this.isOpen = !this.isOpen;
+    }
+  }
+};
 </script>
 
 <style scoped>
 .app-header {
-  background-color: #0066cc;
-  color: white;
+  background-color: #ffcc00; /* Yellow background */
+  color: black; /* Change text color */
   padding: 15px 0;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .header-content {
@@ -40,19 +63,63 @@ export default {
   height: 50px;
 }
 
-.header-title h1 {
+.navigation ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
   margin: 0;
-  font-size: 24px;
 }
 
-.header-title p {
-  margin: 5px 0 0;
-  font-size: 14px;
+.navigation li {
+  margin: 0 15px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.login-dropdown {
+  position: relative;
+  display: inline-block;
 }
 
-.header-date p {
+.login-button {
+  padding: 10px 15px;
+  background-color: white;
+  color: black;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.login-button :hover{
+  background-color: #000000;
+  color: #f2f2f2;
+}
+
+.arrow {
+  margin-left: 5px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: yellow;
+  list-style: none;
   margin: 0;
-  font-size: 14px;
-  font-style: italic;
+  padding: 0;
+  width: 150px;
+  border-radius: 0 0 5px 5px;
+  box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+}
+
+.dropdown-menu li {
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.dropdown-menu li:hover {
+  background-color: #f2f2f2;
 }
 </style>
