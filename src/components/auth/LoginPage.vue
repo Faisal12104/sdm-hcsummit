@@ -45,7 +45,7 @@ import AppHeader from '@/components/layout/Header.vue'
 import AppFooter from '@/components/layout/Footer.vue'
 
 export default {
-  name: 'LoginSuperadmin',
+  name: 'LoginPage',
   components: {
     AppHeader,
     AppFooter
@@ -66,4 +66,4 @@ export default {
 }
 </script>
 
-<style src="./LoginSuperadmin.css"></style>
+<style src="./LoginPage.css"></style>

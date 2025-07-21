@@ -1,7 +1,8 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import LoginSuperadmin from './components/auth/LoginSuperadmin.vue'
+import LoginPage from './components/auth/LoginPage.vue'
 
 const app = createApp(App)
-app.component('LoginSuperadmin', LoginSuperadmin)
+app.component('LoginPage', LoginPage)
 app.mount('#app')
+
