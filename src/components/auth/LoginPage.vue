@@ -1,66 +1,45 @@
 <template>
   <div class="login-page">
-    <AppHeader />
-    
+    <AppHeader @open-login="handleOpenLogin" />
+
     <main class="login-container">
-      <div class="login-card">
-        <div class="login-separator"></div>
-
-        <div class="login-form">
-          <h3>LOGIN ▼</h3>
-          <p class="tagline">Bridging Your Success</p>
-          
-          <!-- Tambahkan form login di sini -->
-          <form @submit.prevent="handleLogin">
-            <div class="form-group">
-              <input 
-                type="text" 
-                v-model="username" 
-                placeholder="Username" 
-                required
-              >
-            </div>
-            <div class="form-group">
-              <input 
-                type="password" 
-                v-model="password" 
-                placeholder="Password" 
-                required
-              >
-            </div>
-            <button type="submit" class="login-button">Login</button>
-          </form>
-        </div>
-
-        <div class="login-separator"></div>
-      </div>
+      <h1 class="title">Bridging Your Success</h1>
     </main>
-    
+
     <AppFooter />
+
+    <!-- LoginBox muncul saat showLogin true -->
+    <LoginBox 
+      v-if="showLogin" 
+      :role="selectedRole" 
+      @close="showLogin = false"
+    />
   </div>
 </template>
 
 <script>
-import AppHeader from '@/components/layout/Header.vue'
-import AppFooter from '@/components/layout/Footer.vue'
+import AppHeader from '@/components/layout/AppHeader.vue'
+import AppFooter from '@/components/layout/AppFooter.vue'
+import LoginBox from '@/components/auth/LoginBox.vue'
 
 export default {
   name: 'LoginPage',
   components: {
     AppHeader,
-    AppFooter
+    AppFooter,
+    LoginBox
   },
   data() {
     return {
-      username: '',
-      password: ''
+      showLogin: false,
+      selectedRole: ''
     }
   },
   methods: {
-    handleLogin() {
-      // Implementasi login logic di sini
-      console.log('Login attempted with:', this.username, this.password)
-      // this.$router.push('/dashboard') // Contoh redirect setelah login
+    handleOpenLogin(role) {
+      console.log('Role diterima:', role)
+      this.selectedRole = role
+      this.showLogin = true
     }
   }
 }

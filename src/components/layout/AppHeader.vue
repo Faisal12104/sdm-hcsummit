@@ -17,9 +17,9 @@
       LOGIN <span class="arrow">▼</span>
     </button>
     <ul v-if="isOpen" class="dropdown-menu">
-      <li>SUPERADMIN</li>
-      <li>ADMIN SEKTOR</li>
-      <li>ADMIN EKSTERNAL</li>
+      <li @click="openLogin('Superadmin')">SUPERADMIN</li>
+      <li @click="openLogin('Admin Sektor')">ADMIN SEKTOR</li>
+      <li @click="openLogin('Admin Eksternal')">ADMIN EKSTERNAL</li>
     </ul>
   </div>
     </div>
@@ -35,10 +35,14 @@ export default {
     };
   },
   methods: {
-    toggleDropdown() {
-      this.isOpen = !this.isOpen;
-    }
+  toggleDropdown() {
+    this.isOpen = !this.isOpen;
+  },
+  openLogin(role) {
+    this.$emit('open-login', role); // kirim event ke parent (Home.vue)
+    this.isOpen = false; // tutup dropdown
   }
+}
 };
 </script>
 
