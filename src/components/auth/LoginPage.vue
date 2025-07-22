@@ -45,4 +45,25 @@ export default {
 }
 </script>
 
+<style>
+.login-container {
+  background: 
+    linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)), 
+    url('src/assets/TEST.jpg') no-repeat center center / cover;
+}
+.overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(255, 255, 255, 0.6); /* putih transparan 60% */
+  z-index: 1;
+}
+
+/* Semua konten di atas overlay */
+.content, .login-box, header, footer {
+  position: relative;
+  z-index: 2;
+}
+</style>
+
 <style src="./LoginPage.css"></style>
