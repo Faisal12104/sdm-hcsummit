@@ -5,6 +5,8 @@ import esdmLogo from '../../assets/Logo_Kementerian_ESDM.png';
 import PopupLogin from '../PopupLogin/PopupLogin';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import './AuthForm.css';
+import { useNavigate } from 'react-router-dom';
+
 
 const AuthForm = () => {
   const [activeTab, setActiveTab] = useState('login');
@@ -40,27 +42,38 @@ const AuthForm = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     
     if (activeTab === 'login') {
-      if (formData.email && formData.username && formData.password) {
-        setIsLoginSuccess(true);
-        setShowPopup(true);
-        setFormData({
-          email: '',
-          username: '',
-          password: '',
-          name: '',
-          company: '',
-          position: '',
-          phone: '',
-          confirmPassword: ''
-        });
-      } else {
-        setIsLoginSuccess(false);
-        setShowPopup(true);
-      }
+  if (formData.email && formData.username && formData.password) {
+    setIsLoginSuccess(true);
+    setShowPopup(true);
+    // Simpan token dummy atau info login (jika belum ada backend)
+    localStorage.setItem('isLoggedIn', 'true');
+
+    // Redirect ke dashboard setelah beberapa saat (misalnya setelah popup sukses ditutup)
+    setTimeout(() => {
+      navigate('/dashboard');
+    }, 1000); // tunggu 1 detik biar popup sempat tampil
+
+    // Reset form
+    setFormData({
+      email: '',
+      username: '',
+      password: '',
+      name: '',
+      company: '',
+      position: '',
+      phone: '',
+      confirmPassword: ''
+    });
+  } else {
+    setIsLoginSuccess(false);
+    setShowPopup(true);
+  }
     } else {
       if (formData.name && formData.username && formData.email && 
           formData.company && formData.position && formData.phone &&
