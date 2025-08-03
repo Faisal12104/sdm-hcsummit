@@ -7,6 +7,7 @@ import DashboardPage from './components/DashboardPage/DashboardPage';
 import Sektor from './components/Manajemen/Sektor';
 import User from './components/Manajemen/User';
 import Berkas from './components/Manajemen/Berkas';
+import Profile from './components/DashboardPage/Profile';
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/sektor" element={<Sektor />} />
         <Route path="/User" element={<User />} />
         <Route path="/Berkas" element={<Berkas />} />
+        <Route path="/Profile" element={<Profile />} />
       </Routes>
     </Router>
   );
