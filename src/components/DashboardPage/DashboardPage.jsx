@@ -1,72 +1,53 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaUser, FaBuilding, FaFileAlt, FaSignOutAlt, FaHome, FaHistory, FaUserCircle  } from 'react-icons/fa';
+import { FaUser, FaBuilding, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars } from 'react-icons/fa';
 import './DashboardPage.css';
 import Footer from '../Footer/Footer';
 import esdmLogo from '../../assets/Logo_Kementerian_ESDM.png';
 
-
 const DashboardPage = () => {
   const navigate = useNavigate();
+  const [isCollapsed, setIsCollapsed] = useState(false);       // desktop collapse
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);   // mobile open/close
 
   const handleLogout = () => {
-    // Hapus token dummy dan redirect
     localStorage.removeItem('isLoggedIn');
-    navigate('/'); // atau '/login' sesuai route login Anda
+    navigate('/');
   };
 
   return (
     <div className="dashboard-container">
       {/* Sidebar */}
-      <aside className="sidebar">
+      <aside className={`sidebar 
+        ${isCollapsed ? 'collapsed' : ''} 
+        ${isSidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
-          <button className="burger-btn">
-            <svg width="24" height="24" fill="currentColor">
-              <path d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+          {/* Burger btn desktop */}
+          <button className="burger-btn desktop-only" onClick={() => setIsCollapsed(!isCollapsed)}>
+            <FaBars size={20} />
           </button>
-          <img 
-              src={esdmLogo} 
-              alt="Kementerian ESDM" 
-              className="hero-logo"
-            />
+          <img src={esdmLogo} alt="Kementerian ESDM" className="hero-logo" />
           <span>BPSDM ESDM</span>
         </div>
         <nav className="nav-links">
-          <button className="active-link">
-            <FaHome />
-            <span>Dashboard</span>
-          </button>
-          <button>
-            <FaUser />
-            <span>Manajemen User</span>
-          </button>
-          <button>
-            <FaBuilding />
-            <span>Manajemen Sektor</span>
-          </button>
-          <button>
-            <FaFileAlt />
-            <span>Manajemen Berkas</span>
-          </button>
-          <button>
-            <FaHistory />
-            <span>Log Aktivitas</span>
-          </button>
-          <button>
-          <FaUserCircle />
-          <span>Profile</span>
-        </button>
+          <button className="active-link"><FaHome /><span>Dashboard</span></button>
+          <button onClick={() => navigate('/user')}><FaUser /><span>Manajemen User</span></button>
+          <button onClick={() => navigate('/sektor')}><FaBuilding /><span>Manajemen Sektor</span></button>
+          <button onClick={() => navigate('/berkas')}><FaFileAlt /><span>Manajemen Berkas</span></button>
+          <button onClick={() => navigate('/profile')}><FaUserCircle /><span>Profile</span></button>
         </nav>
         <button onClick={handleLogout} className="logout-button">
-          <FaSignOutAlt />
-          <span>LOGOUT</span>
+          <FaSignOutAlt /><span>LOGOUT</span>
         </button>
       </aside>
 
-      {/* Main Content */}
+      {/* Main content */}
       <main className="main-content">
         <div className="header-right">
+          {/* Burger btn mobile */}
+          <button className="burger-btn mobile-only" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+            <FaBars size={20} />
+          </button>
           <span>HI, SUPERADMIN!</span>
         </div>
 
@@ -88,7 +69,7 @@ const DashboardPage = () => {
           </div>
         </div>
 
-      <Footer />      
+        <Footer />
       </main>
     </div>
   );

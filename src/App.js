@@ -4,6 +4,9 @@ import AuthForm from './components/AuthForm/AuthForm';
 import PopupLogin from './components/PopupLogin/PopupLogin';
 import ComingSoon from './components/ComingSoon/ComingSoon';
 import DashboardPage from './components/DashboardPage/DashboardPage';
+import Sektor from './components/Manajemen/Sektor';
+import User from './components/Manajemen/User';
+import Berkas from './components/Manajemen/Berkas';
 
 
 function App() {
@@ -15,6 +18,9 @@ function App() {
         <Route path="/popup" element={<PopupLogin />} />
         <Route path="/comingsoon" element={<ComingSoon />} />
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/sektor" element={<Sektor />} />
+        <Route path="/User" element={<User />} />
+        <Route path="/Berkas" element={<Berkas />} />
       </Routes>
     </Router>
   );
