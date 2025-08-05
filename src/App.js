@@ -3,11 +3,14 @@ import HomePage from './components/HomePage/HomePage';
 import AuthForm from './components/AuthForm/AuthForm';
 import PopupLogin from './components/PopupLogin/PopupLogin';
 import ComingSoon from './components/ComingSoon/ComingSoon';
-import DashboardPage from './components/DashboardPage/DashboardPage';
-import Sektor from './components/Manajemen/Sektor';
-import User from './components/Manajemen/User';
-import Berkas from './components/Manajemen/Berkas';
-import Profile from './components/DashboardPage/Profile';
+import Sektor from './components/Admin/SuperAdmin/Manajemen/Sektor';
+import User from './components/Admin/SuperAdmin/Manajemen/User';
+import Berkas from './components/Admin/SuperAdmin/Manajemen/Berkas';
+import Profile from './components/Admin/SuperAdmin/Manajemen/Profile';
+import SuperAdmin from './components/Admin/SuperAdmin/SuperAdmin';
+import AdminExternal from './components/Admin/AdminExternal/AdminExternal';
+import Upload from'./components/Admin/AdminExternal/ManajemenExternal/Upload';
+import Approval from './components/Admin/AdminExternal/ManajemenExternal/Approval';
 
 
 function App() {
@@ -18,11 +21,14 @@ function App() {
         <Route path="/auth" element={<AuthForm />} />
         <Route path="/popup" element={<PopupLogin />} />
         <Route path="/comingsoon" element={<ComingSoon />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/SuperAdmin" element={<SuperAdmin />} />
         <Route path="/sektor" element={<Sektor />} />
         <Route path="/User" element={<User />} />
         <Route path="/Berkas" element={<Berkas />} />
         <Route path="/Profile" element={<Profile />} />
+        <Route path="/AdminExternal" element={<AdminExternal />} />
+        <Route path="/Upload" element={<Upload />} />
+        <Route path="/Approval" element={<Approval />} />
       </Routes>
     </Router>
   );

@@ -1,35 +1,36 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaBuilding, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars, FaEdit, FaTrash } from 'react-icons/fa';
-import './Berkas.css';
-import Footer from '../Footer/Footer';
-import esdmLogo from '../../assets/Logo_Kementerian_ESDM.png';
+import './User.css'; 
+import Footer from '../../../Footer/Footer';
+import esdmLogo from '../../../../assets/Logo_Kementerian_ESDM.png';
 
-const Berkas = () => {
+const User = () => {
   const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // List berkas
-  const [berkasList, setBerkasList] = useState([]);
+  // List user
+  const [userList, setUserList] = useState([]);
 
   const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
     navigate('/');
   };
 
-  // Fungsi tambah berkas baru (dummy data)
-  const addBerkas = () => {
-    const newId = berkasList.length > 0 ? berkasList[berkasList.length - 1].id + 1 : 1;
-    const newBerkas = {
+  // Fungsi tambah user baru (dummy data)
+  const addUser = () => {
+    const newId = userList.length > 0 ? userList[userList.length - 1].id + 1 : 1;
+    const newUser = {
       id: newId,
       nama: 'Nama Lengkap Baru',
-      sektor: 'Geologi',
-      berkas: 'laporan.pdf',
-      tanggal: '12 Juli 2025',
-      perusahaan: 'Pertamina',
+      email: 'email@contoh.com',
+      perusahaan: 'Perusahaan ABC',
+      jabatan: 'Staff',
+      sektor: 'Sektor Contoh',
+      role: 'User'
     };
-    setBerkasList([...berkasList, newBerkas]);
+    setUserList([...userList, newUser]);
   };
 
   return (
@@ -44,10 +45,10 @@ const Berkas = () => {
           <span>BPSDM ESDM</span>
         </div>
         <nav className="nav-links">
-          <button onClick={() => navigate('/dashboard')}><FaHome /><span>Dashboard</span></button>
-          <button onClick={() => navigate('/user')}><FaUser /><span>Manajemen User</span></button>
+          <button onClick={() => navigate('/SuperAdmin')}><FaHome /><span>Dashboard</span></button>
+          <button className="active-link" onClick={() => navigate('/user')}><FaUser /><span>Manajemen User</span></button>
           <button onClick={() => navigate('/sektor')}><FaBuilding /><span>Manajemen Sektor</span></button>
-          <button className="active-link" onClick={() => navigate('/berkas')}><FaFileAlt /><span>Manajemen Berkas</span></button>
+          <button onClick={() => navigate('/berkas')}><FaFileAlt /><span>Manajemen Berkas</span></button>
           <button onClick={() => navigate('/profile')}><FaUserCircle /><span>Profile</span></button>
         </nav>
         <button onClick={handleLogout} className="logout-button">
@@ -68,7 +69,7 @@ const Berkas = () => {
           <div className="manajemen-content">
             <div className="toolbar">
               <input type="text" placeholder="Search" className="search-input" />
-              <button className="add-btn" onClick={addBerkas}>Tambah Berkas +</button>
+              <button className="add-btn" onClick={addUser}>Tambah User +</button>
             </div>
 
             <div className="table-wrapper">
@@ -77,31 +78,33 @@ const Berkas = () => {
                   <tr>
                     <th>ID</th>
                     <th>NAMA LENGKAP</th>
-                    <th>SEKTOR</th>
-                    <th>NAMA BERKAS</th>
-                    <th>TANGGAL</th>
+                    <th>EMAIL</th>
                     <th>PERUSAHAAN</th>
+                    <th>JABATAN</th>
+                    <th>SEKTOR</th>
+                    <th>ROLE</th>
                     <th>AKSI</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {berkasList.map((item) => (
-                    <tr key={item.id}>
-                      <td>{item.id}</td>
-                      <td>{item.nama}</td>
-                      <td>{item.sektor}</td>
-                      <td>{item.berkas}</td>
-                      <td>{item.tanggal}</td>
-                      <td>{item.perusahaan}</td>
+                  {userList.map((user) => (
+                    <tr key={user.id}>
+                      <td>{user.id}</td>
+                      <td>{user.nama}</td>
+                      <td>{user.email}</td>
+                      <td>{user.perusahaan}</td>
+                      <td>{user.jabatan}</td>
+                      <td>{user.sektor}</td>
+                      <td>{user.role}</td>
                       <td>
                         <button className="icon-btn"><FaEdit /></button>
                         <button className="icon-btn"><FaTrash /></button>
                       </td>
                     </tr>
                   ))}
-                  {berkasList.length === 0 && (
+                  {userList.length === 0 && (
                     <tr>
-                      <td colSpan="7" style={{ textAlign: 'center' }}>Belum ada data berkas</td>
+                      <td colSpan="8" style={{ textAlign: 'center' }}>Belum ada data user</td>
                     </tr>
                   )}
                 </tbody>
@@ -116,4 +119,4 @@ const Berkas = () => {
   );
 };
 
-export default Berkas;
+export default User;

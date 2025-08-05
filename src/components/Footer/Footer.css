@@ -4,3 +4,13 @@
   background-color: rgba(255, 255, 255, 0.8);
   margin-top: auto;
 }
+
+.footer-SuperAdmin {
+  background-color: #f1f1f1;
+  color: #333;
+  padding: 20px;
+  text-align: center;
+  font-size: 14px;
+  border-top: 1px solid #ddd;
+  margin-top: auto; /* dorong ke bawah bila menggunakan flex layout */
+}

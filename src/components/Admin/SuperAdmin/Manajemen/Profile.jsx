@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import {
   FaUser, FaBuilding, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars, FaEnvelope
 } from 'react-icons/fa';
-import Footer from '../Footer/Footer';
 import './Profile.css';
-import esdmLogo from '../../assets/Logo_Kementerian_ESDM.png';
+import Footer from '../../../Footer/Footer';
+import esdmLogo from '../../../../assets/Logo_Kementerian_ESDM.png';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ const Profile = () => {
           <span>BPSDM ESDM</span>
         </div>
         <nav className="nav-links">
-          <button onClick={() => navigate('/dashboard')}><FaHome /><span>Dashboard</span></button>
+          <button onClick={() => navigate('/SuperAdmin')}><FaHome /><span>Dashboard</span></button>
           <button onClick={() => navigate('/user')}><FaUser /><span>Manajemen User</span></button>
           <button onClick={() => navigate('/sektor')}><FaBuilding /><span>Manajemen Sektor</span></button>
           <button onClick={() => navigate('/berkas')}><FaFileAlt /><span>Manajemen Berkas</span></button>

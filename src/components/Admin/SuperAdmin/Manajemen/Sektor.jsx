@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaBuilding, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars, FaEdit, FaTrash } from 'react-icons/fa';
 import './Sektor.css';
-import Footer from '../Footer/Footer';
-import esdmLogo from '../../assets/Logo_Kementerian_ESDM.png';
+import Footer from '../../../Footer/Footer';
+import esdmLogo from '../../../../assets/Logo_Kementerian_ESDM.png';
 
 const Sektor = () => {
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ const Sektor = () => {
           <span>BPSDM ESDM</span>
         </div>
         <nav className="nav-links">
-          <button onClick={() => navigate('/dashboard')}><FaHome /><span>Dashboard</span></button>
+          <button onClick={() => navigate('/SuperAdmin')}><FaHome /><span>Dashboard</span></button>
           <button onClick={() => navigate('/user')}><FaUser /><span>Manajemen User</span></button>
           <button className="active-link" onClick={() => navigate('/sektor')}><FaBuilding /><span>Manajemen Sektor</span></button>
           <button onClick={() => navigate('/berkas')}><FaFileAlt /><span>Manajemen Berkas</span></button>

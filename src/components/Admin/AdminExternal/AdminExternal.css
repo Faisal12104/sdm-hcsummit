@@ -3,7 +3,10 @@
   display: flex;
   height: 100vh;
   font-family: sans-serif;
+  min-height: 0;
+
 }
+
 
 /* Sidebar default */
 .sidebar {
@@ -14,6 +17,15 @@
   justify-content: space-between;
   transition: width 0.3s ease, transform 0.3s ease;
 }
+
+.sidebar-logo{
+  width: 100%;
+  max-width: 40px;  /* batas maksimal ukuran agar tidak terlalu besar */
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
 
 /* Collapsed sidebar (mini mode) di desktop */
 .sidebar.collapsed {
@@ -113,15 +125,17 @@
   flex: 1;
   background-color: #f9ae27;
   display: flex;
+    overflow-y: auto;
   flex-direction: column;
   padding: 24px;
 }
 
 .header-right {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-end;
+  padding: 20px;
 }
+
 
 .header-right span {
   font-weight: bold;

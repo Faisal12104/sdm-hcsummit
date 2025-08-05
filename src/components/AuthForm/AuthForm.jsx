@@ -56,7 +56,7 @@ const AuthForm = () => {
 
     // Redirect ke dashboard setelah beberapa saat (misalnya setelah popup sukses ditutup)
     setTimeout(() => {
-      navigate('/dashboard');
+      navigate('/AdminExternal');
     }, 1000); // tunggu 1 detik biar popup sempat tampil
 
     // Reset form
