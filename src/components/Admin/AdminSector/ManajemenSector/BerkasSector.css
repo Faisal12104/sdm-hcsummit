@@ -1,0 +1,104 @@
+/* === Container Layout === */
+.manajemen-container {
+  flex: 1;
+  background-color: #f9ae27;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  min-height: 0;
+}
+
+.manajemen-content {
+  background-color: #fde8a3;
+  padding: 20px;
+  border-radius: 8px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  flex: 1;
+}
+
+/* === Table Styling === */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff6d6;
+  font-size: 15px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.data-table th,
+.data-table td {
+  padding: 10px 14px;
+  text-align: left;
+  border: 1px solid #f2d178;
+}
+
+.data-table th {
+  background-color: #fcd062;
+  font-weight: bold;
+}
+
+.data-table td {
+  background-color: #fff6d6;
+}
+
+/* === Status Badge === */
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 13px;
+  display: inline-block;
+}
+
+.status-badge.approved {
+  background-color: #4caf50;
+  color: white;
+}
+
+.status-badge.rejected {
+  background-color: #fdecec;
+  color: #d32f2f;
+}
+
+.status-badge.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+/* === Edit Button with Icon === */
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: #007bff;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.icon-btn:hover {
+  color: #0056b3;
+}
+
+/* === Responsive === */
+@media (max-width: 600px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .add-btn,
+  .search-input {
+    width: 100%;
+  }
+}

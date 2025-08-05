@@ -11,6 +11,12 @@ import SuperAdmin from './components/Admin/SuperAdmin/SuperAdmin';
 import AdminExternal from './components/Admin/AdminExternal/AdminExternal';
 import Upload from'./components/Admin/AdminExternal/ManajemenExternal/Upload';
 import Approval from './components/Admin/AdminExternal/ManajemenExternal/Approval';
+import AdminSector from './components/Admin/AdminSector/AdminSector';
+import ProfileSector from './components/Admin/AdminSector/ManajemenSector/ProfileSector';
+import UserSector from './components/Admin/AdminSector/ManajemenSector/UserSector';
+import DaftarSector from './components/Admin/AdminSector/ManajemenSector/DaftarSector';
+import BerkasSector from './components/Admin/AdminSector/ManajemenSector/BerkasSector';
+
 
 
 function App() {
@@ -29,6 +35,13 @@ function App() {
         <Route path="/AdminExternal" element={<AdminExternal />} />
         <Route path="/Upload" element={<Upload />} />
         <Route path="/Approval" element={<Approval />} />
+        <Route path="/AdminSector" element={<AdminSector />} />
+        <Route path="/ProfileSector" element={<ProfileSector />} />
+        <Route path="/UserSector" element={<UserSector />} />
+        <Route path="/DaftarSector" element={<DaftarSector />} />
+        <Route path="/BerkasSector" element={<BerkasSector />} />
+
+
       </Routes>
     </Router>
   );
