@@ -23,9 +23,12 @@
   object-fit: contain;
 }
 
+/* HANYA INI YANG DIUBAH */
 .logo-separator {
-  color: #ccc;
-  font-weight: 300;
+  color: #000; /* Warna hitam */
+  font-size: 24px; /* Ukuran sama dengan logo */
+  font-weight: 600; /* Ketebalan font */
+  margin-left: 10px;
 }
 
 .nav a {
@@ -58,6 +61,11 @@
     height: 35px;
   }
   
+  .logo-separator {
+    font-size: 20px; /* Ukuran disesuaikan untuk mobile */
+    margin-left: 0;
+  }
+  
   .nav {
     margin-top: 15px;
   }
@@ -70,6 +78,10 @@
 @media (max-width: 480px) {
   .logo-image {
     height: 30px;
+  }
+  
+  .logo-separator {
+    font-size: 18px; /* Ukuran disesuaikan untuk mobile kecil */
   }
   
   .nav {
