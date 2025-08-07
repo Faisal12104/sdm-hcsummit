@@ -75,7 +75,6 @@ const Upload = () => {
             <label>Upload File</label>
             <div className="upload-file-group">
               <input type="file" id="file-upload" />
-              <input type="text" value="contoh_file.pdf" readOnly />
             </div>
 
             <label>Tanggal Upload</label>

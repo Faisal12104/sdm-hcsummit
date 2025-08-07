@@ -40,7 +40,7 @@ const Berkas = () => {
           <button className="burger-btn desktop-only" onClick={() => setIsCollapsed(!isCollapsed)}>
             <FaBars size={20} />
           </button>
-          <img src={esdmLogo} alt="Kementerian ESDM" className="hero-logo" />
+          <img src={esdmLogo} alt="Kementerian ESDM" className="sidebar-logo" />
           <span>BPSDM ESDM</span>
         </div>
         <nav className="nav-links">
