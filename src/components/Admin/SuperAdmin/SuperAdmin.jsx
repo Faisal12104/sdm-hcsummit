@@ -25,7 +25,7 @@ const SuperAdmin = () => {
   };
 
   return (
-    <div className="dashboard-container">
+    <div className="dashboard-super">
       {/* Sidebar */}
       <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${isSidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">

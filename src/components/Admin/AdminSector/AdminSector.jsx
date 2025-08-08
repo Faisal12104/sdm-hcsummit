@@ -5,7 +5,6 @@ import {
   FaFileSignature ,
   FaFileAlt,
   FaSignOutAlt,
-  FaBuilding,
   FaHome,
   FaUserCircle,
   FaBars,
@@ -25,7 +24,7 @@ const AdminSector = () => {
   };
 
   return (
-    <div className="dashboard-container">
+    <div className="dashboard-sector">
       {/* Sidebar */}
       <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${isSidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
@@ -75,11 +74,6 @@ const AdminSector = () => {
         </div>
 
         <div className="stats">
-          <div className="stat-box">
-            <FaBuilding size={24} />
-            <div className="number">10</div>
-            <div>Total Sektor</div>
-          </div>
           <div className="stat-box">
             <FaUser size={24} />
             <div className="number">250</div>

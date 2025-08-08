@@ -23,7 +23,7 @@ const AdminExternal = () => {
   };
 
   return (
-    <div className="dashboard-container">
+    <div className="dashboard-external">
       {/* Sidebar */}
       <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${isSidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">

@@ -1,11 +1,26 @@
-/* Container */
-.dashboard-container {
+
+.dashboard-sector {
   display: flex;
   height: 100vh;
   font-family: sans-serif;
-  min-height: 0;
-
 }
+
+.header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background-color: #f6d779;
+}
+
+.struktur {
+  width: 100%;               /* 200% biasanya tidak direkomendasikan */
+  max-width: 600px;          /* Gambar tidak akan lebih dari 500px */
+  height: auto;
+  display: block;
+  margin: 40px auto;         /* Memberi space atas & bawah sebesar 40px */
+}
+
 
 /* Sidebar default */
 .sidebar {
@@ -13,13 +28,12 @@
   background-color: #fde8a3;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   transition: width 0.3s ease, transform 0.3s ease;
 }
 
 .sidebar-logo{
   width: 100%;
-  max-width: 35px;  /* batas maksimal ukuran agar tidak terlalu besar */
+  max-width: 40px;  /* batas maksimal ukuran agar tidak terlalu besar */
   height: auto;
   display: block;
   margin: 0 auto;
@@ -45,6 +59,7 @@
   padding: 10px 16px;
   border-bottom: 1px solid #f6d779;
 }
+
 
 /* Nav links */
 .nav-links {
@@ -124,8 +139,11 @@
 
 .header-right {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
   padding: 20px;
+  background-color: #f6d779;
+  border-bottom: 1px solid #e0c85b;
 }
 
 
