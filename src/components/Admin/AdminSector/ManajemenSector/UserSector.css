@@ -1,3 +1,10 @@
+.dashboard-usersector {
+  display: flex;
+  height: 100vh;
+  font-family: sans-serif;
+  min-height: 0;
+}
+
 .manajemen-container {
   flex: 1;
   background-color: #f9ae27;

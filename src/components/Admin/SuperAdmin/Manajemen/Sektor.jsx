@@ -26,7 +26,7 @@ const Sektor = () => {
   };
 
   return (
-    <div className="dashboard-container">
+    <div className="dashboard-sektoradmin">
       {/* Sidebar */}
       <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${isSidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">

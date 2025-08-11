@@ -1,4 +1,3 @@
-/* Container */
 .dashboard-super {
   display: flex;
   height: 100vh;
@@ -14,8 +13,8 @@
 }
 
 .struktur {
-  width: 100%;               /* 200% biasanya tidak direkomendasikan */
-  max-width: 600px;          /* Gambar tidak akan lebih dari 500px */
+  width: 200%;               /* 200% biasanya tidak direkomendasikan */
+  max-width: 800px;          /* Gambar tidak akan lebih dari 500px */
   height: auto;
   display: block;
   margin: 40px auto;         /* Memberi space atas & bawah sebesar 40px */

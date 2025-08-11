@@ -34,7 +34,7 @@ const User = () => {
   };
 
   return (
-    <div className="dashboard-container">
+    <div className="dashboard-useradmin">
       {/* Sidebar */}
       <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${isSidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">

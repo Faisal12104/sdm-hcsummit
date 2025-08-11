@@ -23,7 +23,7 @@ const BerkasSector = () => {
   };
 
   return (
-    <div className="dashboard-container">
+    <div className="dashboard-berkassector">
       <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${isSidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
           <button className="burger-btn desktop-only" onClick={() => setIsCollapsed(!isCollapsed)}>

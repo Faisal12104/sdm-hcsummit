@@ -22,7 +22,7 @@ const Upload = () => {
   };
 
   return (
-    <div className="dashboard-container">
+    <div className="dashboard-upload">
       {/* Sidebar */}
       <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${isSidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">

@@ -31,7 +31,7 @@ const DaftarSector = () => {
   };
 
   return (
-    <div className="dashboard-container">
+    <div className="dashboard-daftarsector">
       <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${isSidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
           <button className="burger-btn desktop-only" onClick={() => setIsCollapsed(!isCollapsed)}>

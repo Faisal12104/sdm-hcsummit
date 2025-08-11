@@ -1,3 +1,10 @@
+.dashboard-profilesector {
+  display: flex;
+  height: 100vh;
+  font-family: sans-serif;
+  min-height: 0;
+}
+
 .profile-container {
   background-color: #f9ae27;
   padding: 24px;
