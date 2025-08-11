@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaUser, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars, FaEdit, FaTrash, FaFileSignature } from 'react-icons/fa';
+import { FaUser, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars, FaFileSignature } from 'react-icons/fa';
 import './UserSector.css'; 
 import Footer from '../../../Footer/Footer';
 import esdmLogo from '../../../../assets/Logo_Kementerian_ESDM.png';
@@ -11,13 +11,17 @@ const UserSector = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // List user
-  const [userList, setUserList] = useState([]);
+  const [userList, setUserList] = useState([
+    { id: 1, nama: "User A", email: "a@email.com", perusahaan: "PT A", jabatan: "Staff", sektor: "Energi", role: "User", status: "approved" },
+    { id: 2, nama: "User B", email: "b@email.com", perusahaan: "PT B", jabatan: "Manager", sektor: "Pertambangan", role: "User", status: "pending" },
+    { id: 3, nama: "User C", email: "c@email.com", perusahaan: "PT C", jabatan: "Staff", sektor: "Gas", role: "User", status: "rejected" }
+  ]);
 
   const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
     navigate('/');
   };
-
+  
   // Fungsi tambah user baru (dummy data)
   const addUser = () => {
     const newId = userList.length > 0 ? userList[userList.length - 1].id + 1 : 1;
@@ -28,7 +32,8 @@ const UserSector = () => {
       perusahaan: 'Perusahaan ABC',
       jabatan: 'Staff',
       sektor: 'Sektor Contoh',
-      role: 'User'
+      role: 'User',
+      status: 'pending' // default status
     };
     setUserList([...userList, newUser]);
   };
@@ -83,7 +88,7 @@ const UserSector = () => {
                     <th>JABATAN</th>
                     <th>SEKTOR</th>
                     <th>ROLE</th>
-                    <th>AKSI</th>
+                    <th>STATUS</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -97,8 +102,9 @@ const UserSector = () => {
                       <td>{user.sektor}</td>
                       <td>{user.role}</td>
                       <td>
-                        <button className="icon-btn"><FaEdit /></button>
-                        <button className="icon-btn"><FaTrash /></button>
+                        {user.status === "approved" && <span className="status-badge approved">Approved</span>}
+                        {user.status === "pending" && <span className="status-badge pending">Pending</span>}
+                        {user.status === "rejected" && <span className="status-badge rejected">Rejected</span>}
                       </td>
                     </tr>
                   ))}
