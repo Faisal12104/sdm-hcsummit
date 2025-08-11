@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import { FaBars, FaHome, FaUser, FaBuilding, FaFileAlt, FaUserCircle, FaSignOutAlt, FaEdit, FaTrash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { FaUser, FaBuilding, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars, FaEdit, FaTrash } from 'react-icons/fa';
 import './Berkas.css';
 import Footer from '../../../Footer/Footer';
 import esdmLogo from '../../../../assets/Logo_Kementerian_ESDM.png';
@@ -9,28 +9,30 @@ const Berkas = () => {
   const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [selectedSektor, setSelectedSektor] = useState('');
 
-  // List berkas
-  const [berkasList, setBerkasList] = useState([]);
+ const addBerkas = () => {
+    alert('Fitur tambah berkas akan segera dibuat!');
+  };
+
+  const dataGeologi = [
+    { id: 1, nama: 'Andi', sektor: 'Geologi', berkas: 'laporan1.pdf', tanggal: '10 Juli 2025', perusahaan: 'Pertamina' },
+    { id: 2, nama: 'Budi', sektor: 'Geologi', berkas: 'laporan2.pdf', tanggal: '11 Juli 2025', perusahaan: 'Freeport' },
+  ];
+
+  const dataMineral = [
+    { id: 1, nama: 'Citra', sektor: 'Mineral', berkas: 'mineral1.pdf', tanggal: '12 Juli 2025', perusahaan: 'Antam' },
+  ];
+
+  const dataEnergi = [
+    { id: 1, nama: 'Dewi', sektor: 'Energi', berkas: 'energi1.pdf', tanggal: '13 Juli 2025', perusahaan: 'PLN' },
+  ];
 
   const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
     navigate('/');
   };
 
-  // Fungsi tambah berkas baru (dummy data)
-  const addBerkas = () => {
-    const newId = berkasList.length > 0 ? berkasList[berkasList.length - 1].id + 1 : 1;
-    const newBerkas = {
-      id: newId,
-      nama: 'Nama Lengkap Baru',
-      sektor: 'Geologi',
-      berkas: 'laporan.pdf',
-      tanggal: '12 Juli 2025',
-      perusahaan: 'Pertamina',
-    };
-    setBerkasList([...berkasList, newBerkas]);
-  };
 
   return (
     <div className="dashboard-berkasadmin">
@@ -67,25 +69,25 @@ const Berkas = () => {
         <div className="manajemen-container">
           <div className="manajemen-content">
             <div className="toolbar">
+              <select value={selectedSektor} onChange={(e) => setSelectedSektor(e.target.value)}>
+                <option value="">-- Pilih Sektor --</option>
+                <option value="Geologi">Geologi</option>
+                <option value="Mineral">Mineral</option>
+                <option value="Energi">Energi</option>
+              </select>
               <input type="text" placeholder="Search" className="search-input" />
               <button className="add-btn" onClick={addBerkas}>Tambah Berkas +</button>
             </div>
 
-            <div className="table-wrapper">
+            {selectedSektor === 'Geologi' && (
               <table className="data-table">
                 <thead>
                   <tr>
-                    <th>ID</th>
-                    <th>NAMA LENGKAP</th>
-                    <th>SEKTOR</th>
-                    <th>NAMA BERKAS</th>
-                    <th>TANGGAL</th>
-                    <th>PERUSAHAAN</th>
-                    <th>AKSI</th>
+                    <th>ID</th><th>NAMA</th><th>SEKTOR</th><th>BERKAS</th><th>TANGGAL</th><th>PERUSAHAAN</th><th>AKSI</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {berkasList.map((item) => (
+                  {dataGeologi.map(item => (
                     <tr key={item.id}>
                       <td>{item.id}</td>
                       <td>{item.nama}</td>
@@ -99,17 +101,63 @@ const Berkas = () => {
                       </td>
                     </tr>
                   ))}
-                  {berkasList.length === 0 && (
-                    <tr>
-                      <td colSpan="7" style={{ textAlign: 'center' }}>Belum ada data berkas</td>
-                    </tr>
-                  )}
                 </tbody>
               </table>
-            </div>
+            )}
+
+            {selectedSektor === 'Mineral' && (
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th><th>NAMA</th><th>SEKTOR</th><th>BERKAS</th><th>TANGGAL</th><th>PERUSAHAAN</th><th>AKSI</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {dataMineral.map(item => (
+                    <tr key={item.id}>
+                      <td>{item.id}</td>
+                      <td>{item.nama}</td>
+                      <td>{item.sektor}</td>
+                      <td>{item.berkas}</td>
+                      <td>{item.tanggal}</td>
+                      <td>{item.perusahaan}</td>
+                      <td>
+                        <button className="icon-btn"><FaEdit /></button>
+                        <button className="icon-btn"><FaTrash /></button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+
+            {selectedSektor === 'Energi' && (
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th><th>NAMA</th><th>SEKTOR</th><th>BERKAS</th><th>TANGGAL</th><th>PERUSAHAAN</th><th>AKSI</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {dataEnergi.map(item => (
+                    <tr key={item.id}>
+                      <td>{item.id}</td>
+                      <td>{item.nama}</td>
+                      <td>{item.sektor}</td>
+                      <td>{item.berkas}</td>
+                      <td>{item.tanggal}</td>
+                      <td>{item.perusahaan}</td>
+                      <td>
+                        <button className="icon-btn"><FaEdit /></button>
+                        <button className="icon-btn"><FaTrash /></button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
-
         <Footer />
       </main>
     </div>

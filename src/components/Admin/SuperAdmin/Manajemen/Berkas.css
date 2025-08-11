@@ -5,6 +5,7 @@
   min-height: 0;
 }
 
+/* Kontainer utama */
 .manajemen-container {
   flex: 1;
   background-color: #f9ae27;
@@ -24,15 +25,18 @@
   background-color: #fde8a3;
   padding: 16px;
   border-radius: 8px;
-  flex: 1; /* NEW: isi ruang kosong, dorong footer ke bawah */
+  flex: 1; /* isi ruang kosong, dorong footer ke bawah */
   display: flex;
   flex-direction: column;
   min-height: 0;
 }
 
+/* Toolbar */
 .toolbar {
   display: flex;
-  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
   margin-bottom: 12px;
 }
 
@@ -40,30 +44,40 @@
   padding: 6px 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  flex: 1;
+  min-width: 160px;
 }
 
 .add-btn {
   background-color: #f7c02d;
   border: none;
-  padding: 6px 10px;
+  padding: 6px 14px;
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
+  transition: background-color 0.2s ease;
 }
 
+.add-btn:hover {
+  background-color: #e6ad10;
+}
+
+/* Table */
 .table-wrapper {
+  flex: 1;
   overflow-x: auto;
+  border-radius: 6px;
 }
-
 
 .data-table {
-min-width: 600px;
+  min-width: 600px;
   width: 100%;
   border-collapse: collapse;
   background-color: #fff3cc;
 }
 
-.data-table th, .data-table td {
+.data-table th,
+.data-table td {
   padding: 8px 12px;
   text-align: left;
   border: 1px solid #e2c267;
@@ -74,6 +88,7 @@ min-width: 600px;
   font-weight: bold;
 }
 
+/* Tombol ikon */
 .icon-btn {
   background: none;
   border: none;
@@ -81,20 +96,56 @@ min-width: 600px;
   margin-right: 6px;
   color: #333;
   font-size: 16px;
+  transition: color 0.2s ease;
+}
+
+.icon-btn:hover {
+  color: #000;
 }
 
 .icon-btn:last-child {
   margin-right: 0;
 }
 
+/* Animasi table container */
+.table-container {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.table-container.hidden {
+  opacity: 0;
+  transform: scale(0.98);
+  pointer-events: none;
+}
+
+.table-container.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
 /* Responsive toolbar */
 @media (max-width: 600px) {
   .toolbar {
     flex-direction: column;
-    gap: 8px;
+    align-items: stretch;
   }
 
   .add-btn {
     width: 100%;
   }
+}
+
+select {
+  border: none;
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  background-color: #f7c02d
+  ;
+}
+
+select:hover {
+  border-color: #4caf50;
 }
