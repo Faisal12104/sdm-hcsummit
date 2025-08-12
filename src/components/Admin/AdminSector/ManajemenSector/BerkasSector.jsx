@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  FaUser, FaFileAlt, FaSignOutAlt, FaHome,
-  FaUserCircle, FaBars, FaFileSignature, FaEdit
-} from 'react-icons/fa';
+import {FaUser, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars, FaEdit} from 'react-icons/fa';
 import './BerkasSector.css';
 import Footer from '../../../Footer/Footer';
 import esdmLogo from '../../../../assets/Logo_Kementerian_ESDM.png';
@@ -35,7 +32,6 @@ const BerkasSector = () => {
         <nav className="nav-links">
           <button onClick={() => navigate('/AdminSector')}><FaHome /><span>Dashboard</span></button>
           <button onClick={() => navigate('/usersector')}><FaUser /><span>Manajemen User</span></button>
-          <button onClick={() => navigate('/daftarsector')}><FaFileSignature /><span>Manajemen Pendaftaran</span></button>
           <button className="active-link" onClick={() => navigate('/berkassector')}><FaFileAlt /><span>Manajemen Berkas</span></button>
           <button onClick={() => navigate('/profilesector')}><FaUserCircle /><span>Profile</span></button>
         </nav>

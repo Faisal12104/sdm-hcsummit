@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaUser, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars, FaFileSignature } from 'react-icons/fa';
+import { FaUser, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars } from 'react-icons/fa';
 import './UserSector.css'; 
 import Footer from '../../../Footer/Footer';
 import esdmLogo from '../../../../assets/Logo_Kementerian_ESDM.png';
@@ -9,12 +9,13 @@ const UserSector = () => {
   const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [filter, setFilter] = useState('terbaru'); // default filter
 
   // List user
   const [userList, setUserList] = useState([
-    { id: 1, nama: "User A", email: "a@email.com", perusahaan: "PT A", jabatan: "Staff", sektor: "Energi", role: "User", status: "approved" },
-    { id: 2, nama: "User B", email: "b@email.com", perusahaan: "PT B", jabatan: "Manager", sektor: "Pertambangan", role: "User", status: "pending" },
-    { id: 3, nama: "User C", email: "c@email.com", perusahaan: "PT C", jabatan: "Staff", sektor: "Gas", role: "User", status: "rejected" }
+    { id: 1, nama: "User A", email: "a@email.com", perusahaan: "PT A", jabatan: "Staff", sektor: "Energi", role: "User", status: "approved", daftar:"24-02-2025 17:45:22", approve:"07-06-2025 23:52:12" },
+    { id: 2, nama: "User B", email: "b@email.com", perusahaan: "PT B", jabatan: "Manager", sektor: "Pertambangan", role: "User", status: "pending", daftar:"16-02-2025 12:45:22", approve:"-", },
+    { id: 3, nama: "User C", email: "c@email.com", perusahaan: "PT C", jabatan: "Staff", sektor: "Gas", role: "User", status: "rejected", daftar:"12-02-2025 20:45:22", approve:"22-06-2025 12:52:12" }
   ]);
 
   const handleLogout = () => {
@@ -22,7 +23,7 @@ const UserSector = () => {
     navigate('/');
   };
   
-  // Fungsi tambah user baru (dummy data)
+  // Fungsi tambah user baru
   const addUser = () => {
     const newId = userList.length > 0 ? userList[userList.length - 1].id + 1 : 1;
     const newUser = {
@@ -33,10 +34,33 @@ const UserSector = () => {
       jabatan: 'Staff',
       sektor: 'Sektor Contoh',
       role: 'User',
-      status: 'pending' // default status
+      status: 'pending',
+      daftar: new Date().toLocaleString(),
+      approve: '-'
     };
     setUserList([...userList, newUser]);
   };
+
+  // Fungsi approve & reject
+  const handleApprove = (id) => {
+    setUserList(userList.map(user =>
+      user.id === id ? { ...user, status: 'approved', approve: new Date().toLocaleString() } : user
+    ));
+  };
+
+  const handleReject = (id) => {
+    setUserList(userList.map(user =>
+      user.id === id ? { ...user, status: 'rejected', approve: new Date().toLocaleString() } : user
+    ));
+  };
+
+  // Filter data
+  const filteredUsers = userList.filter(user => {
+    if (filter === 'approve') return user.status === 'approved';
+    if (filter === 'reject') return user.status === 'rejected';
+    if (filter === 'terbaru') return user.status === 'pending';
+    return true;
+  });
 
   return (
     <div className="dashboard-usersector">
@@ -50,11 +74,10 @@ const UserSector = () => {
           <span>BPSDM ESDM</span>
         </div>
         <nav className="nav-links">
-            <button onClick={() => navigate('/AdminSector')}><FaHome /><span>Dashboard</span></button>
-            <button className="active-link" onClick={() => navigate('/usersector')}><FaUser /><span>Manajemen User</span></button>
-            <button onClick={() => navigate('/daftarsector')}><FaFileSignature /><span>Manajemen Pendaftaran</span></button>
-            <button onClick={() => navigate('/berkassector')}><FaFileAlt /><span>Manajemen Berkas</span></button>
-            <button onClick={() => navigate('/profilesector')}><FaUserCircle /><span>Profile</span></button>
+          <button onClick={() => navigate('/AdminSector')}><FaHome /><span>Dashboard</span></button>
+          <button className="active-link" onClick={() => navigate('/usersector')}><FaUser /><span>Manajemen User</span></button>
+          <button onClick={() => navigate('/berkassector')}><FaFileAlt /><span>Manajemen Berkas</span></button>
+          <button onClick={() => navigate('/profilesector')}><FaUserCircle /><span>Profile</span></button>
         </nav>
         <button onClick={handleLogout} className="logout-button">
           <FaSignOutAlt /><span>LOGOUT</span>
@@ -74,6 +97,11 @@ const UserSector = () => {
           <div className="manajemen-content">
             <div className="toolbar">
               <input type="text" placeholder="Search" className="search-input" />
+              <select value={filter} onChange={(e) => setFilter(e.target.value)} className="filter-select">
+                <option value="terbaru">Terbaru</option>
+                <option value="approve">Approve</option>
+                <option value="reject">Reject</option>
+              </select>
               <button className="add-btn" onClick={addUser}>Tambah User +</button>
             </div>
 
@@ -88,11 +116,13 @@ const UserSector = () => {
                     <th>JABATAN</th>
                     <th>SEKTOR</th>
                     <th>ROLE</th>
-                    <th>STATUS</th>
+                    <th>{filter === 'terbaru' ? 'AKSI' : 'STATUS'}</th>
+                    <th>TANGGAL DAFTAR</th>
+                    <th>TANGGAL APPROVE</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {userList.map((user) => (
+                  {filteredUsers.map((user) => (
                     <tr key={user.id}>
                       <td>{user.id}</td>
                       <td>{user.nama}</td>
@@ -102,15 +132,26 @@ const UserSector = () => {
                       <td>{user.sektor}</td>
                       <td>{user.role}</td>
                       <td>
-                        {user.status === "approved" && <span className="status-badge approved">Approved</span>}
-                        {user.status === "pending" && <span className="status-badge pending">Pending</span>}
-                        {user.status === "rejected" && <span className="status-badge rejected">Rejected</span>}
+                        {filter === 'terbaru' ? (
+                          <>
+                            <button className="approve-btn" onClick={() => handleApprove(user.id)}>Approve</button>
+                            <button className="reject-btn" onClick={() => handleReject(user.id)}>Reject</button>
+                          </>
+                        ) : (
+                          <>
+                            {user.status === "approved" && <span className="status-badge approved">Approved</span>}
+                            {user.status === "pending" && <span className="status-badge pending">Pending</span>}
+                            {user.status === "rejected" && <span className="status-badge rejected">Rejected</span>}
+                          </>
+                        )}
                       </td>
+                      <td>{user.daftar}</td>
+                      <td>{user.approve}</td>
                     </tr>
                   ))}
-                  {userList.length === 0 && (
+                  {filteredUsers.length === 0 && (
                     <tr>
-                      <td colSpan="8" style={{ textAlign: 'center' }}>Belum ada data user</td>
+                      <td colSpan="10" style={{ textAlign: 'center' }}>Tidak ada data</td>
                     </tr>
                   )}
                 </tbody>

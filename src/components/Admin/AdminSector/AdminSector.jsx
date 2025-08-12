@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   FaUser,
-  FaFileSignature ,
   FaFileAlt,
+  FaBuilding ,
   FaSignOutAlt,
   FaHome,
   FaUserCircle,
@@ -44,10 +44,6 @@ const AdminSector = () => {
             <FaUser />
             <span>Manajemen User</span>
           </button>
-          <button onClick={() => navigate('/daftarsector')}>
-            <FaFileSignature  />
-            <span>Manajemen Pendaftaran</span>
-          </button>
           <button onClick={() => navigate('/berkassector')}>
             <FaFileAlt />
             <span>Manajemen Berkas</span>
@@ -74,6 +70,11 @@ const AdminSector = () => {
         </div>
 
         <div className="stats">
+          <div className="stat-box">
+            <FaBuilding  size={24} />
+            <div className="number">12</div>
+            <div>Total Perushaan</div>
+          </div>
           <div className="stat-box">
             <FaUser size={24} />
             <div className="number">250</div>

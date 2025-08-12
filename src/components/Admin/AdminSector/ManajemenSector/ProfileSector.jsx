@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  FaUser, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars, FaEnvelope, FaFileSignature
+  FaUser, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars, FaEnvelope
 } from 'react-icons/fa';
 import './ProfileSector.css';
 import Footer from '../../../Footer/Footer';
@@ -32,7 +32,6 @@ const ProfileSector = () => {
         <nav className="nav-links">
           <button onClick={() => navigate('/AdminSector')}><FaHome /><span>Dashboard</span></button>
           <button onClick={() => navigate('/usersector')}><FaUser /><span>Manajemen User</span></button>
-          <button onClick={() => navigate('/daftarsector')}><FaFileSignature /><span>Manajemen Pendaftaran</span></button>
           <button onClick={() => navigate('/berkassector')}><FaFileAlt /><span>Manajemen Berkas</span></button>
           <button className="active-link" onClick={() => navigate('/profilesector')}><FaUserCircle /><span>Profile</span></button>
         </nav>
