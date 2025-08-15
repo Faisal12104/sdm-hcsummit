@@ -13,14 +13,6 @@
   background-color: #f6d779;
 }
 
-.struktur {
-  width: 100%;               /* 200% biasanya tidak direkomendasikan */
-  max-width: 600px;          /* Gambar tidak akan lebih dari 500px */
-  height: auto;
-  display: block;
-  margin: 40px auto;         /* Memberi space atas & bawah sebesar 40px */
-}
-
 
 /* Sidebar default */
 .sidebar {

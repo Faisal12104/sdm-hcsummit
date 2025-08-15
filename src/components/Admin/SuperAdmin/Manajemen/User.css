@@ -42,14 +42,6 @@
   border-radius: 4px;
 }
 
-.add-btn {
-  background-color: #f7c02d;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-}
 
 .table-wrapper {
   overflow-x: auto;

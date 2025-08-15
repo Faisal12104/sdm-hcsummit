@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaUser, FaBuilding, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaUser, FaBuilding, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars } from 'react-icons/fa';
 import './Sektor.css';
 import Footer from '../../../Footer/Footer';
 import esdmLogo from '../../../../assets/Logo_Kementerian_ESDM.png';
@@ -18,7 +18,6 @@ const Sektor = () => {
     navigate('/');
   };
 
-  // Fungsi tambah sektor baru (contoh nama default "Sektor Baru")
   const addSektor = () => {
     const newId = sektorList.length > 0 ? sektorList[sektorList.length - 1].id + 1 : 1;
     const newSektor = { id: newId, nama: 'Sektor Baru' };
@@ -39,7 +38,7 @@ const Sektor = () => {
         <nav className="nav-links">
           <button onClick={() => navigate('/SuperAdmin')}><FaHome /><span>Dashboard</span></button>
           <button onClick={() => navigate('/user')}><FaUser /><span>Manajemen User</span></button>
-          <button className="active-link" onClick={() => navigate('/sektor')}><FaBuilding /><span>Manajemen Sektor</span></button>
+          <button className="active-link" onClick={() => navigate('/sektor')}><FaBuilding /><span>List Sektor</span></button>
           <button onClick={() => navigate('/berkas')}><FaFileAlt /><span>Manajemen Berkas</span></button>
           <button onClick={() => navigate('/profile')}><FaUserCircle /><span>Profile</span></button>
         </nav>
@@ -70,7 +69,6 @@ const Sektor = () => {
                 <tr>
                   <th>ID</th>
                   <th>SEKTOR</th>
-                  <th>AKSI</th>
                 </tr>
               </thead>
               <tbody>
@@ -78,10 +76,6 @@ const Sektor = () => {
                   <tr key={item.id}>
                     <td>{item.id}</td>
                     <td>{item.nama}</td>
-                    <td>
-                      <button className="icon-btn"><FaEdit /></button>
-                      <button className="icon-btn"><FaTrash /></button>
-                    </td>
                   </tr>
                 ))}
               </tbody>

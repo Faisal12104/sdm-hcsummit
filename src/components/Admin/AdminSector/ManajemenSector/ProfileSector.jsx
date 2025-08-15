@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   FaUser, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars, FaEnvelope
@@ -9,11 +9,30 @@ import esdmLogo from '../../../../assets/Logo_Kementerian_ESDM.png';
 
 const ProfileSector = () => {
   const navigate = useNavigate();
-  const [isCollapsed, setIsCollapsed] = useState(false);       // desktop collapse
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);   // mobile open/close
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // State untuk data user
+  const [user, setUser] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    sektor: '',
+    jabatan: '',
+    perusahaan: ''
+  });
+
+  useEffect(() => {
+    // Ambil data user dari localStorage
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('user');
     navigate('/');
   };
 
@@ -41,13 +60,12 @@ const ProfileSector = () => {
       </aside>
 
       {/* Main content */}
-      <main className="main-content">
-        {/* Burger btn mobile */}
+<main className="main-content">
         <div className="header-right">
           <button className="burger-btn mobile-only" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
             <FaBars size={20} />
           </button>
-          <span>HI, ADMIN!</span>
+          <span>HI, {user.name?.toUpperCase() || 'USER'}!</span>
         </div>
 
         <div className="profile-container">
@@ -55,8 +73,8 @@ const ProfileSector = () => {
             <div className="profile-info">
               <img src="https://i.pravatar.cc/100" alt="Profile" className="profile-avatar" />
               <div>
-                <div className="profile-name">Acha</div>
-                <div className="profile-email">achahahahah@gmail.com</div>
+                <div className="profile-name">{user.name}</div>
+                <div className="profile-email">{user.email}</div>
               </div>
             </div>
             <button className="edit-btn">Edit</button>
@@ -66,26 +84,26 @@ const ProfileSector = () => {
             <div className="form-row">
               <div className="form-group">
                 <label>Nama Lengkap</label>
-                <input type="text" placeholder="Your First Name" />
+                <input type="text" value={user.name} readOnly />
               </div>
               <div className="form-group">
                 <label>Nomor Hp</label>
-                <input type="text" placeholder="Your First Name" />
+                <input type="text" value={user.phone} readOnly />
               </div>
             </div>
             <div className="form-row">
               <div className="form-group">
                 <label>Sektor</label>
-                <input type="text" placeholder="Your First Name" />
+                <input type="text" value={user.sektor} readOnly />
               </div>
               <div className="form-group">
                 <label>Jabatan</label>
-                <input type="text" placeholder="Your First Name" />
+                <input type="text" value={user.jabatan} readOnly />
               </div>
             </div>
             <div className="form-group full-width">
               <label>Perusahaan</label>
-              <input type="text" placeholder="Your First Name" />
+              <input type="text" value={user.perusahaan} readOnly />
             </div>
           </div>
 
@@ -94,7 +112,7 @@ const ProfileSector = () => {
             <div className="email-item">
               <FaEnvelope className="email-icon" />
               <div>
-                <div className="email-text">achahahahah@gmail.com</div>
+                <div className="email-text">{user.email}</div>
                 <div className="email-date">1 month ago</div>
               </div>
             </div>

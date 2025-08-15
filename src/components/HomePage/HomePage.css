@@ -6,11 +6,12 @@
   font-family: 'Arial', sans-serif;
   color: #333;
   position: relative;
+  overflow: hidden;
 }
 
-.main-content {
-  flex: 1;
-  padding: 40px;
+.main-content, header, footer {
+  position: relative;
+  z-index: 1;
 }
 
 .hero {
@@ -24,6 +25,7 @@
 .hero-logo-container {
   margin-bottom: 30px;
 }
+
 
 .hero-logo {
   height: 200px;

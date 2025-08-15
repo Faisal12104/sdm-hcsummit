@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaUser, FaBuilding, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars, FaEdit, FaTrash } from 'react-icons/fa';
-import './User.css'; 
+import { FaUser, FaBuilding, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars, FaTrash } from 'react-icons/fa';
+import './User.css';
 import Footer from '../../../Footer/Footer';
 import esdmLogo from '../../../../assets/Logo_Kementerian_ESDM.png';
 
@@ -9,28 +9,30 @@ const User = () => {
   const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  // List user
-  const [userList, setUserList] = useState([]);
+  // Data dummy untuk contoh
+  const [userList, setUserList] = useState([
+    { id: 1, nama: 'Budi Santoso', email: 'budi@example.com', perusahaan: 'PT Maju', jabatan: 'Manager', sektor: 'Energi', role: 'Admin' },
+    { id: 2, nama: 'Siti Aminah', email: 'siti@example.com', perusahaan: 'PT Jaya', jabatan: 'Staff', sektor: 'Mineral', role: 'User' }
+  ]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    navigate('/');
+  // Filter pencarian
+  const filteredUsers = userList.filter(user =>
+    user.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.perusahaan.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Hapus user (lokal saja)
+  const handleDeleteUser = (userId) => {
+    setUserList(prev => prev.filter(user => user.id !== userId));
   };
 
-  // Fungsi tambah user baru (dummy data)
-  const addUser = () => {
-    const newId = userList.length > 0 ? userList[userList.length - 1].id + 1 : 1;
-    const newUser = {
-      id: newId,
-      nama: 'Nama Lengkap Baru',
-      email: 'email@contoh.com',
-      perusahaan: 'Perusahaan ABC',
-      jabatan: 'Staff',
-      sektor: 'Sektor Contoh',
-      role: 'User'
-    };
-    setUserList([...userList, newUser]);
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/');
   };
 
   return (
@@ -47,7 +49,7 @@ const User = () => {
         <nav className="nav-links">
           <button onClick={() => navigate('/SuperAdmin')}><FaHome /><span>Dashboard</span></button>
           <button className="active-link" onClick={() => navigate('/user')}><FaUser /><span>Manajemen User</span></button>
-          <button onClick={() => navigate('/sektor')}><FaBuilding /><span>Manajemen Sektor</span></button>
+          <button onClick={() => navigate('/sektor')}><FaBuilding /><span>List Sektor</span></button>
           <button onClick={() => navigate('/berkas')}><FaFileAlt /><span>Manajemen Berkas</span></button>
           <button onClick={() => navigate('/profile')}><FaUserCircle /><span>Profile</span></button>
         </nav>
@@ -68,8 +70,13 @@ const User = () => {
         <div className="manajemen-container">
           <div className="manajemen-content">
             <div className="toolbar">
-              <input type="text" placeholder="Search" className="search-input" />
-              <button className="add-btn" onClick={addUser}>Tambah User +</button>
+              <input
+                type="text"
+                placeholder="Search"
+                className="search-input"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
 
             <div className="table-wrapper">
@@ -87,22 +94,26 @@ const User = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {userList.map((user) => (
-                    <tr key={user.id}>
-                      <td>{user.id}</td>
-                      <td>{user.nama}</td>
-                      <td>{user.email}</td>
-                      <td>{user.perusahaan}</td>
-                      <td>{user.jabatan}</td>
-                      <td>{user.sektor}</td>
-                      <td>{user.role}</td>
-                      <td>
-                        <button className="icon-btn"><FaEdit /></button>
-                        <button className="icon-btn"><FaTrash /></button>
-                      </td>
-                    </tr>
-                  ))}
-                  {userList.length === 0 && (
+                  {filteredUsers.length > 0 ? (
+                    filteredUsers.map(user => (
+                      <tr key={user.id}>
+                        <td>{user.id}</td>
+                        <td>{user.nama}</td>
+                        <td>{user.email}</td>
+                        <td>{user.perusahaan}</td>
+                        <td>{user.jabatan}</td>
+                        <td>{user.sektor}</td>
+                        <td>{user.role}</td>
+                        <td>
+                          <div className="action-buttons">
+                            <button className="icon-btn delete-btn" onClick={() => handleDeleteUser(user.id)}>
+                              <FaTrash />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
                     <tr>
                       <td colSpan="8" style={{ textAlign: 'center' }}>Belum ada data user</td>
                     </tr>

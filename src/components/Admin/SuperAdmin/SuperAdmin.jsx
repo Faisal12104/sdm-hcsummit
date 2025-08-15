@@ -47,7 +47,7 @@ const SuperAdmin = () => {
           </button>
           <button onClick={() => navigate('/sektor')}>
             <FaBuilding />
-            <span>Manajemen Sektor</span>
+            <span>List Sektor</span>
           </button>
           <button onClick={() => navigate('/berkas')}>
             <FaFileAlt />

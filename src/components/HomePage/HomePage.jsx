@@ -15,7 +15,6 @@ const HomePage = () => {
   return (
     <div className="landing-page">
       <Header />
-      
       <main className="main-content">
         <section className="hero">
           <div className="hero-logo-container">

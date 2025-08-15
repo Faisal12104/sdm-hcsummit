@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaBars, FaHome, FaUser, FaBuilding, FaFileAlt, FaUserCircle, FaSignOutAlt, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaBars, FaHome, FaUser, FaBuilding, FaFileAlt, FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import './Berkas.css';
 import Footer from '../../../Footer/Footer';
@@ -11,28 +11,112 @@ const Berkas = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedSektor, setSelectedSektor] = useState('');
 
- const addBerkas = () => {
+
+const handleAction = async (action, id, berkas, setData) => {
+  let url = '';
+  let method = action === 'download' ? 'GET' : 'POST';
+
+  if (action === 'approve') {
+    url = `http://localhost:3000/api/berkas/superadmin/berkas/${id}/approve`;
+  } else if (action === 'reject') {
+    url = `http://localhost:3000/api/berkas/superadmin/berkas/${id}/reject`;
+  } else if (action === 'download') {
+    url = `http://localhost:3000/api/berkas/superadmin/berkas/${id}/download`;
+  }
+
+  try {
+    if (action === 'download') {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Gagal mengunduh berkas');
+      const blob = await response.blob();
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = berkas;
+      link.click();
+    } else {
+      const response = await fetch(url, { method });
+      if (!response.ok) throw new Error(`Gagal ${action} berkas`);
+
+      if (action === 'approve') {
+        setData(prevData =>
+          prevData.map(item =>
+            item.id === id
+              ? { ...item, tanggalApprove: new Date().toLocaleDateString('id-ID') }
+              : item
+          )
+        );
+      }
+
+      alert(`Berkas ${berkas} berhasil di-${action}`);
+    }
+  } catch (error) {
+    console.error(error);
+    alert(`Terjadi kesalahan saat ${action} berkas`);
+  }
+};
+
+  // Data tiap sektor dalam state agar bisa diupdate
+  const [dataGeologi, setDataGeologi] = useState([
+    { id: 1, nama: 'Andi', sektor: 'Geologi', berkas: 'laporan1.pdf', tanggalUpload: '10 Juli 2025', tanggalApprove: '', perusahaan: 'Pertamina' },
+    { id: 2, nama: 'Budi', sektor: 'Geologi', berkas: 'laporan2.pdf', tanggalUpload: '11 Juli 2025', tanggalApprove: '', perusahaan: 'Freeport' },
+  ]);
+
+  const [dataMineral, setDataMineral] = useState([
+    { id: 1, nama: 'Citra', sektor: 'Mineral', berkas: 'mineral1.pdf', tanggalUpload: '12 Juli 2025', tanggalApprove: '', perusahaan: 'Antam' },
+  ]);
+
+  const [dataEnergi, setDataEnergi] = useState([
+    { id: 1, nama: 'Dewi', sektor: 'Energi', berkas: 'energi1.pdf', tanggalUpload: '13 Juli 2025', tanggalApprove: '', perusahaan: 'PLN' },
+  ]);
+
+  const addBerkas = () => {
     alert('Fitur tambah berkas akan segera dibuat!');
   };
-
-  const dataGeologi = [
-    { id: 1, nama: 'Andi', sektor: 'Geologi', berkas: 'laporan1.pdf', tanggal: '10 Juli 2025', perusahaan: 'Pertamina' },
-    { id: 2, nama: 'Budi', sektor: 'Geologi', berkas: 'laporan2.pdf', tanggal: '11 Juli 2025', perusahaan: 'Freeport' },
-  ];
-
-  const dataMineral = [
-    { id: 1, nama: 'Citra', sektor: 'Mineral', berkas: 'mineral1.pdf', tanggal: '12 Juli 2025', perusahaan: 'Antam' },
-  ];
-
-  const dataEnergi = [
-    { id: 1, nama: 'Dewi', sektor: 'Energi', berkas: 'energi1.pdf', tanggal: '13 Juli 2025', perusahaan: 'PLN' },
-  ];
 
   const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
     navigate('/');
   };
 
+
+  const renderTable = (data, setData) => (
+    <table className="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>NAMA</th>
+          <th>SEKTOR</th>
+          <th>BERKAS</th>
+          <th>TANGGAL UPLOAD</th>
+          <th>TANGGAL APPROVE</th>
+          <th>PERUSAHAAN</th>
+          <th>AKSI</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.map(item => (
+          <tr key={item.id}>
+            <td>{item.id}</td>
+            <td>{item.nama}</td>
+            <td>{item.sektor}</td>
+            <td>{item.berkas}</td>
+            <td>{item.tanggalUpload}</td>
+            <td>{item.tanggalApprove || '-'}</td>
+            <td>{item.perusahaan}</td>
+            <td>
+              <select onChange={(e) => handleAction(e.target.value, item.id, item.berkas, setData)} defaultValue="">
+                <option value="" disabled>Pilih Aksi</option>
+                <option value="approve">Approve</option>
+                <option value="reject">Reject</option>
+                <option value="download">Download</option>
+              </select>
+
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
 
   return (
     <div className="dashboard-berkasadmin">
@@ -48,7 +132,7 @@ const Berkas = () => {
         <nav className="nav-links">
           <button onClick={() => navigate('/SuperAdmin')}><FaHome /><span>Dashboard</span></button>
           <button onClick={() => navigate('/user')}><FaUser /><span>Manajemen User</span></button>
-          <button onClick={() => navigate('/sektor')}><FaBuilding /><span>Manajemen Sektor</span></button>
+          <button onClick={() => navigate('/sektor')}><FaBuilding /><span>List Sektor</span></button>
           <button className="active-link" onClick={() => navigate('/berkas')}><FaFileAlt /><span>Manajemen Berkas</span></button>
           <button onClick={() => navigate('/profile')}><FaUserCircle /><span>Profile</span></button>
         </nav>
@@ -79,83 +163,9 @@ const Berkas = () => {
               <button className="add-btn" onClick={addBerkas}>Tambah Berkas +</button>
             </div>
 
-            {selectedSektor === 'Geologi' && (
-              <table className="data-table">
-                <thead>
-                  <tr>
-                    <th>ID</th><th>NAMA</th><th>SEKTOR</th><th>BERKAS</th><th>TANGGAL</th><th>PERUSAHAAN</th><th>AKSI</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dataGeologi.map(item => (
-                    <tr key={item.id}>
-                      <td>{item.id}</td>
-                      <td>{item.nama}</td>
-                      <td>{item.sektor}</td>
-                      <td>{item.berkas}</td>
-                      <td>{item.tanggal}</td>
-                      <td>{item.perusahaan}</td>
-                      <td>
-                        <button className="icon-btn"><FaEdit /></button>
-                        <button className="icon-btn"><FaTrash /></button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-
-            {selectedSektor === 'Mineral' && (
-              <table className="data-table">
-                <thead>
-                  <tr>
-                    <th>ID</th><th>NAMA</th><th>SEKTOR</th><th>BERKAS</th><th>TANGGAL</th><th>PERUSAHAAN</th><th>AKSI</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dataMineral.map(item => (
-                    <tr key={item.id}>
-                      <td>{item.id}</td>
-                      <td>{item.nama}</td>
-                      <td>{item.sektor}</td>
-                      <td>{item.berkas}</td>
-                      <td>{item.tanggal}</td>
-                      <td>{item.perusahaan}</td>
-                      <td>
-                        <button className="icon-btn"><FaEdit /></button>
-                        <button className="icon-btn"><FaTrash /></button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-
-            {selectedSektor === 'Energi' && (
-              <table className="data-table">
-                <thead>
-                  <tr>
-                    <th>ID</th><th>NAMA</th><th>SEKTOR</th><th>BERKAS</th><th>TANGGAL</th><th>PERUSAHAAN</th><th>AKSI</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dataEnergi.map(item => (
-                    <tr key={item.id}>
-                      <td>{item.id}</td>
-                      <td>{item.nama}</td>
-                      <td>{item.sektor}</td>
-                      <td>{item.berkas}</td>
-                      <td>{item.tanggal}</td>
-                      <td>{item.perusahaan}</td>
-                      <td>
-                        <button className="icon-btn"><FaEdit /></button>
-                        <button className="icon-btn"><FaTrash /></button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
+            {selectedSektor === 'Geologi' && renderTable(dataGeologi, setDataGeologi)}
+            {selectedSektor === 'Mineral' && renderTable(dataMineral, setDataMineral)}
+            {selectedSektor === 'Energi' && renderTable(dataEnergi, setDataEnergi)}
           </div>
         </div>
         <Footer />
