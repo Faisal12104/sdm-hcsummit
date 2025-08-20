@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaBuilding, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars, FaTrash } from 'react-icons/fa';
 import './User.css';
@@ -10,24 +10,62 @@ const User = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [userList, setUserList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Data dummy untuk contoh
-  const [userList, setUserList] = useState([
-    { id: 1, nama: 'Budi Santoso', email: 'budi@example.com', perusahaan: 'PT Maju', jabatan: 'Manager', sektor: 'Energi', role: 'Admin' },
-    { id: 2, nama: 'Siti Aminah', email: 'siti@example.com', perusahaan: 'PT Jaya', jabatan: 'Staff', sektor: 'Mineral', role: 'User' }
-  ]);
+  // Fetch users data on component mount
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/auth/eksternal');
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch users');
+        }
+        
+        const data = await response.json();
+        setUserList(data);
+      } catch (err) {
+        setError(err.message);
+        console.error('Error fetching users:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  // Filter pencarian
+    fetchUsers();
+  }, []);
+
+  // Handle delete user
+  const handleDeleteUser = async (userId) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/auth/eksternal/${userId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete user');
+      }
+
+      // Update local state after successful deletion
+      setUserList(prev => prev.filter(user => user.id !== userId));
+    } catch (err) {
+      console.error('Error deleting user:', err);
+      setError(err.message);
+    }
+  };
+
+  // Filter users based on search term
   const filteredUsers = userList.filter(user =>
     user.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.perusahaan.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  // Hapus user (lokal saja)
-  const handleDeleteUser = (userId) => {
-    setUserList(prev => prev.filter(user => user.id !== userId));
-  };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -69,6 +107,8 @@ const User = () => {
 
         <div className="manajemen-container">
           <div className="manajemen-content">
+            {error && <div className="error-message">{error}</div>}
+            
             <div className="toolbar">
               <input
                 type="text"
@@ -80,46 +120,56 @@ const User = () => {
             </div>
 
             <div className="table-wrapper">
-              <table className="data-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>NAMA LENGKAP</th>
-                    <th>EMAIL</th>
-                    <th>PERUSAHAAN</th>
-                    <th>JABATAN</th>
-                    <th>SEKTOR</th>
-                    <th>ROLE</th>
-                    <th>AKSI</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredUsers.length > 0 ? (
-                    filteredUsers.map(user => (
-                      <tr key={user.id}>
-                        <td>{user.id}</td>
-                        <td>{user.nama}</td>
-                        <td>{user.email}</td>
-                        <td>{user.perusahaan}</td>
-                        <td>{user.jabatan}</td>
-                        <td>{user.sektor}</td>
-                        <td>{user.role}</td>
-                        <td>
-                          <div className="action-buttons">
-                            <button className="icon-btn delete-btn" onClick={() => handleDeleteUser(user.id)}>
-                              <FaTrash />
-                            </button>
-                          </div>
+              {isLoading ? (
+                <div className="loading-indicator">Loading users...</div>
+              ) : (
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>NAMA LENGKAP</th>
+                      <th>EMAIL</th>
+                      <th>PERUSAHAAN</th>
+                      <th>JABATAN</th>
+                      <th>SEKTOR</th>
+                      <th>ROLE</th>
+                      <th>AKSI</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredUsers.length > 0 ? (
+                      filteredUsers.map(user => (
+                        <tr key={user.id}>
+                          <td>{user.id}</td>
+                          <td>{user.nama}</td>
+                          <td>{user.email}</td>
+                          <td>{user.perusahaan}</td>
+                          <td>{user.jabatan}</td>
+                          <td>{user.sektor}</td>
+                          <td>{user.role}</td>
+                          <td>
+                            <div className="action-buttons">
+                              <button 
+                                className="icon-btn delete-btn" 
+                                onClick={() => handleDeleteUser(user.id)}
+                                disabled={isLoading}
+                              >
+                                <FaTrash />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="8" style={{ textAlign: 'center' }}>
+                          {searchTerm ? 'No matching users found' : 'No users available'}
                         </td>
                       </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="8" style={{ textAlign: 'center' }}>Belum ada data user</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+                    )}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
         </div>

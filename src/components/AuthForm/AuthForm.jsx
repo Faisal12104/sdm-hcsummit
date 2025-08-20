@@ -7,7 +7,6 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import './AuthForm.css';
 import { useNavigate } from 'react-router-dom';
 
-
 const AuthForm = () => {
   const [activeTab, setActiveTab] = useState('login');
   const [showPopup, setShowPopup] = useState(false);
@@ -44,127 +43,160 @@ const AuthForm = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (activeTab === 'login') {
-  if (formData.email && formData.username && formData.password) {
-    setIsLoginSuccess(true);
-    setShowPopup(true);
-    // Simpan token dummy atau info login (jika belum ada backend)
-    localStorage.setItem('isLoggedIn', 'true');
 
-    // Redirect ke dashboard setelah beberapa saat (misalnya setelah popup sukses ditutup)
-    setTimeout(() => {
-      navigate('/AdminSector');
-    }, 1000); // tunggu 1 detik biar popup sempat tampil
+    try {
+      if (activeTab === 'login') {
+        // API Login - send either email OR username, not both
+        const loginData = {
+          password: formData.password
+        };
+        
+        // Use email if provided, otherwise use username
+        if (formData.email.trim()) {
+          loginData.email = formData.email;
+        } else if (formData.username.trim()) {
+          loginData.username = formData.username;
+        }
 
-    // Reset form
-    setFormData({
-      email: '',
-      username: '',
-      password: '',
-      name: '',
-      company: '',
-      position: '',
-      phone: '',
-      confirmPassword: ''
-    });
-  } else {
-    setIsLoginSuccess(false);
-    setShowPopup(true);
-  }
-    } else {
-      if (formData.name && formData.username && formData.email && 
-          formData.company && formData.position && formData.phone &&
-          formData.password && formData.password === formData.confirmPassword &&
-          agreeToTerms) {
-        setIsLoginSuccess(true);
-        setShowPopup(true);
-        setFormData({
-          email: '',
-          username: '',
-          password: '',
-          name: '',
-          company: '',
-          position: '',
-          phone: '',
-          confirmPassword: ''
+        const response = await fetch('http://localhost:3000/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(loginData)
         });
-        setAgreeToTerms(false);
+
+        const result = await response.json();
+        console.log('Login Response:', result);
+
+        if (response.ok) {
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('userData', JSON.stringify(result.user));
+          setIsLoginSuccess(true);
+          setShowPopup(true);
+          
+          // Navigate based on role
+          setTimeout(() => {
+            if (result.user.role === 'Superadmin') {
+              navigate('/SuperAdmin');
+            } else if (result.user.role === 'Admin_satuan_kerja') {
+              navigate('/AdminSector');
+            } else {
+              navigate('/AdminExternal');
+            }
+          }, 1000);
+        } else {
+          setIsLoginSuccess(false);
+          setShowPopup(true);
+        }
+
       } else {
-        setIsLoginSuccess(false);
-        setShowPopup(true);
+        // API Register - fix field names to match backend
+        const response = await fetch('http://localhost:3000/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nama_lengkap: formData.name,
+            username: formData.username,
+            email: formData.email,
+            nama_perusahaan: formData.company,
+            nama_jabatan: formData.position,
+            no_telp: formData.phone,
+            password: formData.password
+          })
+        });
+
+        const result = await response.json();
+        console.log('Register Response:', result);
+
+        if (response.ok) {
+          setIsLoginSuccess(true);
+          setShowPopup(true);
+          // Clear form after successful registration
+          setFormData({
+            email: '',
+            username: '',
+            password: '',
+            name: '',
+            company: '',
+            position: '',
+            phone: '',
+            confirmPassword: ''
+          });
+        } else {
+          setIsLoginSuccess(false);
+          setShowPopup(true);
+        }
       }
+    } catch (error) {
+      console.error('Error:', error);
+      setIsLoginSuccess(false);
+      setShowPopup(true);
     }
   };
 
   return (
     <div className="landing-page">
       <Header />
-      
+
       <div className="auth-page">
         <div className="auth-container">
           <div className="auth-logo-container">
-            <img 
-              src={esdmLogo} 
-              alt="Kementerian ESDM" 
-              className="auth-logo"
-            />
+            <img src={esdmLogo} alt="Kementerian ESDM" className="auth-logo" />
           </div>
-          
-          <h1 className="auth-title">PORTAL BERKAS<br/>BPSDM ESDM</h1>
+
+          <h1 className="auth-title">PORTAL BERKAS<br />BPSDM ESDM</h1>
           <p className="auth-subtitle">Human Capital Summit 2025</p>
-          
+
           <div className="auth-active-tab-title">
             {activeTab === 'login' ? 'LOGIN' : 'REGISTRASI'}
           </div>
-          
+
           <form className="auth-form" onSubmit={handleSubmit}>
             {activeTab === 'login' ? (
               <>
                 <div className="auth-input-group">
                   <label htmlFor="login-email" className="auth-input-label">Email</label>
-                  <input 
+                  <input
                     id="login-email"
-                    type="email" 
+                    type="email"
                     name="email"
-                    placeholder="Masukkan email Anda" 
-                    className="auth-input" 
+                    placeholder="Masukkan email Anda"
+                    className="auth-input"
                     value={formData.email}
                     onChange={handleChange}
                     required
                   />
                 </div>
-                
+
                 <div className="auth-input-group">
                   <label htmlFor="login-username" className="auth-input-label">Username</label>
-                  <input 
+                  <input
                     id="login-username"
-                    type="text" 
+                    type="text"
                     name="username"
-                    placeholder="Masukkan username Anda" 
-                    className="auth-input" 
+                    placeholder="Masukkan username Anda"
+                    className="auth-input"
                     value={formData.username}
                     onChange={handleChange}
                     required
                   />
                 </div>
-                
+
                 <div className="auth-input-group">
                   <label htmlFor="login-password" className="auth-input-label">Password</label>
                   <div className="password-input-container">
-                    <input 
+                    <input
                       id="login-password"
-                      type={showPassword ? "text" : "password"} 
+                      type={showPassword ? "text" : "password"}
                       name="password"
-                      placeholder="Masukkan password Anda" 
-                      className="auth-input" 
+                      placeholder="Masukkan password Anda"
+                      className="auth-input"
                       value={formData.password}
                       onChange={handleChange}
                       required
                     />
-                    <button 
+                    <button
                       type="button"
                       className="password-toggle"
                       onClick={togglePasswordVisibility}
@@ -174,13 +206,13 @@ const AuthForm = () => {
                     </button>
                   </div>
                 </div>
-                
+
                 <button type="submit" className="auth-button">MASUK</button>
-                
+
                 <p className="auth-switch-text">
                   Belum punya akun?{' '}
-                  <span 
-                    className="auth-switch-link" 
+                  <span
+                    className="auth-switch-link"
                     onClick={() => setActiveTab('register')}
                   >
                     Daftar di sini
@@ -191,12 +223,12 @@ const AuthForm = () => {
               <>
                 <div className="auth-input-group">
                   <label htmlFor="register-name" className="auth-input-label">Nama Lengkap</label>
-                  <input 
+                  <input
                     id="register-name"
-                    type="text" 
+                    type="text"
                     name="name"
-                    placeholder="Masukkan nama lengkap Anda" 
-                    className="auth-input" 
+                    placeholder="Masukkan nama lengkap Anda"
+                    className="auth-input"
                     value={formData.name}
                     onChange={handleChange}
                     required
@@ -205,26 +237,26 @@ const AuthForm = () => {
 
                 <div className="auth-input-group">
                   <label htmlFor="register-username" className="auth-input-label">Username</label>
-                  <input 
+                  <input
                     id="register-username"
-                    type="text" 
+                    type="text"
                     name="username"
-                    placeholder="Masukkan username Anda" 
-                    className="auth-input" 
+                    placeholder="Masukkan username Anda"
+                    className="auth-input"
                     value={formData.username}
                     onChange={handleChange}
                     required
                   />
                 </div>
-                
+
                 <div className="auth-input-group">
                   <label htmlFor="register-email" className="auth-input-label">Email</label>
-                  <input 
+                  <input
                     id="register-email"
-                    type="email" 
+                    type="email"
                     name="email"
-                    placeholder="Masukkan email Anda" 
-                    className="auth-input" 
+                    placeholder="Masukkan email Anda"
+                    className="auth-input"
                     value={formData.email}
                     onChange={handleChange}
                     required
@@ -233,12 +265,12 @@ const AuthForm = () => {
 
                 <div className="auth-input-group">
                   <label htmlFor="register-company" className="auth-input-label">Perusahaan</label>
-                  <input 
+                  <input
                     id="register-company"
-                    type="text" 
+                    type="text"
                     name="company"
-                    placeholder="Masukkan nama perusahaan Anda" 
-                    className="auth-input" 
+                    placeholder="Masukkan nama perusahaan Anda"
+                    className="auth-input"
                     value={formData.company}
                     onChange={handleChange}
                     required
@@ -247,12 +279,12 @@ const AuthForm = () => {
 
                 <div className="auth-input-group">
                   <label htmlFor="register-position" className="auth-input-label">Jabatan</label>
-                  <input 
+                  <input
                     id="register-position"
-                    type="text" 
+                    type="text"
                     name="position"
-                    placeholder="Masukkan jabatan Anda" 
-                    className="auth-input" 
+                    placeholder="Masukkan jabatan Anda"
+                    className="auth-input"
                     value={formData.position}
                     onChange={handleChange}
                     required
@@ -261,33 +293,33 @@ const AuthForm = () => {
 
                 <div className="auth-input-group">
                   <label htmlFor="register-phone" className="auth-input-label">Nomor HP</label>
-                  <input 
+                  <input
                     id="register-phone"
-                    type="tel" 
+                    type="tel"
                     name="phone"
-                    placeholder="Masukkan nomor HP Anda" 
-                    className="auth-input" 
+                    placeholder="Masukkan nomor HP Anda"
+                    className="auth-input"
                     value={formData.phone}
                     onChange={handleChange}
                     required
                   />
                 </div>
-                
+
                 <div className="auth-input-group">
                   <label htmlFor="register-password" className="auth-input-label">Password</label>
                   <div className="password-input-container">
-                    <input 
+                    <input
                       id="register-password"
-                      type={showPassword ? "text" : "password"} 
+                      type={showPassword ? "text" : "password"}
                       name="password"
-                      placeholder="Buat password Anda (min. 8 karakter)" 
-                      className="auth-input" 
+                      placeholder="Buat password Anda (min. 8 karakter)"
+                      className="auth-input"
                       value={formData.password}
                       onChange={handleChange}
                       minLength="8"
                       required
                     />
-                    <button 
+                    <button
                       type="button"
                       className="password-toggle"
                       onClick={togglePasswordVisibility}
@@ -297,21 +329,21 @@ const AuthForm = () => {
                     </button>
                   </div>
                 </div>
-                
+
                 <div className="auth-input-group">
                   <label htmlFor="register-confirm-password" className="auth-input-label">Konfirmasi Password</label>
                   <div className="password-input-container">
-                    <input 
+                    <input
                       id="register-confirm-password"
-                      type={showConfirmPassword ? "text" : "password"} 
+                      type={showConfirmPassword ? "text" : "password"}
                       name="confirmPassword"
-                      placeholder="Ulangi password Anda" 
-                      className="auth-input" 
+                      placeholder="Ulangi password Anda"
+                      className="auth-input"
                       value={formData.confirmPassword}
                       onChange={handleChange}
                       required
                     />
-                    <button 
+                    <button
                       type="button"
                       className="password-toggle"
                       onClick={toggleConfirmPasswordVisibility}
@@ -334,13 +366,13 @@ const AuthForm = () => {
                     Saya menyetujui <a href="/comingsoon" className="terms-link">Syarat dan Ketentuan</a>
                   </label>
                 </div>
-                
+
                 <button type="submit" className="auth-button">DAFTAR</button>
-                
+
                 <p className="auth-switch-text">
                   Sudah punya akun?{' '}
-                  <span 
-                    className="auth-switch-link" 
+                  <span
+                    className="auth-switch-link"
                     onClick={() => setActiveTab('login')}
                   >
                     Login di sini
@@ -351,25 +383,19 @@ const AuthForm = () => {
           </form>
         </div>
       </div>
-      
+
       {showPopup && (
         <PopupLogin
           isSuccess={isLoginSuccess}
-          message={isLoginSuccess 
-            ? activeTab === 'login' 
-              ? "Login berhasil!" 
+          message={isLoginSuccess
+            ? activeTab === 'login'
+              ? "Login berhasil!"
               : "Registrasi berhasil!"
-            : activeTab === 'login'
-              ? "Email, username dan password wajib diisi!"
-              : !agreeToTerms
-                ? "Anda harus menyetujui Syarat dan Ketentuan!"
-                : formData.password !== formData.confirmPassword
-                  ? "Password dan konfirmasi password tidak sama!"
-                  : "Semua field wajib diisi!"}
+            : "Gagal memproses permintaan"}
           onClose={() => setShowPopup(false)}
         />
       )}
-      
+
       <Footer />
     </div>
   );

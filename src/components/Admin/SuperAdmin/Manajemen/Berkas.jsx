@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaBars, FaHome, FaUser, FaBuilding, FaFileAlt, FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import './Berkas.css';
@@ -10,113 +10,190 @@ const Berkas = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedSektor, setSelectedSektor] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [berkasData, setBerkasData] = useState({
+    Geologi: [],
+    Mineral: [],
+    Energi: []
+  });
 
+  // Fetch data on component mount and when selectedSektor changes
+  useEffect(() => {
+    const fetchBerkas = async () => {
+      setIsLoading(true);
+      setError(null);
+      
+      try {
+        const response = await fetch(`http://localhost:3000/api/berkas/superadmin?sektor=${selectedSektor}`);
+        
+        if (!response.ok) {
+          throw new Error('Gagal memuat data berkas');
+        }
+        
+        const data = await response.json();
+        
+        if (selectedSektor) {
+          // Update specific sector data
+          setBerkasData(prev => ({
+            ...prev,
+            [selectedSektor]: data
+          }));
+        } else {
+          // Update all sectors data (if your API supports this)
+          setBerkasData(data);
+        }
+      } catch (err) {
+        setError(err.message);
+        console.error('Error fetching berkas:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-const handleAction = async (action, id, berkas, setData) => {
-  let url = '';
-  let method = action === 'download' ? 'GET' : 'POST';
+    fetchBerkas();
+  }, [selectedSektor]);
 
-  if (action === 'approve') {
-    url = `http://localhost:3000/api/berkas/superadmin/berkas/${id}/approve`;
-  } else if (action === 'reject') {
-    url = `http://localhost:3000/api/berkas/superadmin/berkas/${id}/reject`;
-  } else if (action === 'download') {
-    url = `http://localhost:3000/api/berkas/superadmin/berkas/${id}/download`;
-  }
+  const handleAction = async (action, id, berkas) => {
+    setIsLoading(true);
+    setError(null);
+    
+    let url = '';
+    let method = action === 'download' ? 'GET' : 'POST';
+    const token = localStorage.getItem('token');
 
-  try {
-    if (action === 'download') {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error('Gagal mengunduh berkas');
-      const blob = await response.blob();
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = berkas;
-      link.click();
-    } else {
-      const response = await fetch(url, { method });
-      if (!response.ok) throw new Error(`Gagal ${action} berkas`);
+    if (action === 'approve') {
+      url = `http://localhost:3000/api/berkas/superadmin/berkas/${id}/approve`;
+    } else if (action === 'reject') {
+      url = `http://localhost:3000/api/berkas/superadmin/berkas/${id}/reject`;
+    } else if (action === 'download') {
+      url = `http://localhost:3000/api/berkas/superadmin/berkas/${id}/download`;
+    }
 
-      if (action === 'approve') {
-        setData(prevData =>
-          prevData.map(item =>
-            item.id === id
-              ? { ...item, tanggalApprove: new Date().toLocaleDateString('id-ID') }
-              : item
-          )
+    try {
+      const headers = {
+        'Authorization': `Bearer ${token}`
+      };
+
+      if (action !== 'download') {
+        headers['Content-Type'] = 'application/json';
+      }
+
+      const response = await fetch(url, { 
+        method,
+        headers
+      });
+
+      if (!response.ok) {
+        throw new Error(`Gagal ${action} berkas`);
+      }
+
+      if (action === 'download') {
+        const blob = await response.blob();
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = berkas;
+        link.click();
+      } else {
+        // Update local state after successful action
+        const updatedData = berkasData[selectedSektor].map(item =>
+          item.id === id
+            ? { 
+                ...item, 
+                tanggalApprove: action === 'approve' 
+                  ? new Date().toLocaleDateString('id-ID') 
+                  : item.tanggalApprove,
+                status: action === 'approve' ? 'Approved' : 'Rejected'
+              }
+            : item
         );
+
+        setBerkasData(prev => ({
+          ...prev,
+          [selectedSektor]: updatedData
+        }));
       }
 
       alert(`Berkas ${berkas} berhasil di-${action}`);
+    } catch (error) {
+      setError(error.message);
+      console.error(error);
+      alert(`Terjadi kesalahan saat ${action} berkas: ${error.message}`);
+    } finally {
+      setIsLoading(false);
     }
-  } catch (error) {
-    console.error(error);
-    alert(`Terjadi kesalahan saat ${action} berkas`);
-  }
-};
-
-  // Data tiap sektor dalam state agar bisa diupdate
-  const [dataGeologi, setDataGeologi] = useState([
-    { id: 1, nama: 'Andi', sektor: 'Geologi', berkas: 'laporan1.pdf', tanggalUpload: '10 Juli 2025', tanggalApprove: '', perusahaan: 'Pertamina' },
-    { id: 2, nama: 'Budi', sektor: 'Geologi', berkas: 'laporan2.pdf', tanggalUpload: '11 Juli 2025', tanggalApprove: '', perusahaan: 'Freeport' },
-  ]);
-
-  const [dataMineral, setDataMineral] = useState([
-    { id: 1, nama: 'Citra', sektor: 'Mineral', berkas: 'mineral1.pdf', tanggalUpload: '12 Juli 2025', tanggalApprove: '', perusahaan: 'Antam' },
-  ]);
-
-  const [dataEnergi, setDataEnergi] = useState([
-    { id: 1, nama: 'Dewi', sektor: 'Energi', berkas: 'energi1.pdf', tanggalUpload: '13 Juli 2025', tanggalApprove: '', perusahaan: 'PLN' },
-  ]);
+  };
 
   const addBerkas = () => {
-    alert('Fitur tambah berkas akan segera dibuat!');
+    navigate('/berkas/tambah');
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     navigate('/');
   };
 
+  const renderTable = (data) => {
+    const filteredData = data.filter(item =>
+      item.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.berkas.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.perusahaan.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
-  const renderTable = (data, setData) => (
-    <table className="data-table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>NAMA</th>
-          <th>SEKTOR</th>
-          <th>BERKAS</th>
-          <th>TANGGAL UPLOAD</th>
-          <th>TANGGAL APPROVE</th>
-          <th>PERUSAHAAN</th>
-          <th>AKSI</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map(item => (
-          <tr key={item.id}>
-            <td>{item.id}</td>
-            <td>{item.nama}</td>
-            <td>{item.sektor}</td>
-            <td>{item.berkas}</td>
-            <td>{item.tanggalUpload}</td>
-            <td>{item.tanggalApprove || '-'}</td>
-            <td>{item.perusahaan}</td>
-            <td>
-              <select onChange={(e) => handleAction(e.target.value, item.id, item.berkas, setData)} defaultValue="">
-                <option value="" disabled>Pilih Aksi</option>
-                <option value="approve">Approve</option>
-                <option value="reject">Reject</option>
-                <option value="download">Download</option>
-              </select>
-
-            </td>
+    return (
+      <table className="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>NAMA</th>
+            <th>SEKTOR</th>
+            <th>BERKAS</th>
+            <th>TANGGAL UPLOAD</th>
+            <th>TANGGAL APPROVE</th>
+            <th>PERUSAHAAN</th>
+            <th>STATUS</th>
+            <th>AKSI</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
-  );
+        </thead>
+        <tbody>
+          {filteredData.length > 0 ? (
+            filteredData.map(item => (
+              <tr key={item.id}>
+                <td>{item.id}</td>
+                <td>{item.nama}</td>
+                <td>{item.sektor}</td>
+                <td>{item.berkas}</td>
+                <td>{item.tanggalUpload}</td>
+                <td>{item.tanggalApprove || '-'}</td>
+                <td>{item.perusahaan}</td>
+                <td>{item.status || 'Pending'}</td>
+                <td>
+                  <select 
+                    onChange={(e) => handleAction(e.target.value, item.id, item.berkas)} 
+                    defaultValue=""
+                    disabled={isLoading}
+                  >
+                    <option value="" disabled>Pilih Aksi</option>
+                    <option value="approve">Approve</option>
+                    <option value="reject">Reject</option>
+                    <option value="download">Download</option>
+                  </select>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="9" style={{ textAlign: 'center' }}>
+                {searchTerm ? 'Tidak ada berkas yang sesuai' : 'Tidak ada data berkas'}
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    );
+  };
 
   return (
     <div className="dashboard-berkasadmin">
@@ -152,20 +229,55 @@ const handleAction = async (action, id, berkas, setData) => {
 
         <div className="manajemen-container">
           <div className="manajemen-content">
+            {error && <div className="error-message">{error}</div>}
+            
             <div className="toolbar">
-              <select value={selectedSektor} onChange={(e) => setSelectedSektor(e.target.value)}>
-                <option value="">-- Pilih Sektor --</option>
+              <select 
+                value={selectedSektor} 
+                onChange={(e) => setSelectedSektor(e.target.value)}
+                disabled={isLoading}
+              >
+                <option value="">-- Semua Sektor --</option>
                 <option value="Geologi">Geologi</option>
                 <option value="Mineral">Mineral</option>
                 <option value="Energi">Energi</option>
               </select>
-              <input type="text" placeholder="Search" className="search-input" />
-              <button className="add-btn" onClick={addBerkas}>Tambah Berkas +</button>
+              <input 
+                type="text" 
+                placeholder="Cari berkas..." 
+                className="search-input" 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <button 
+                className="add-btn" 
+                onClick={addBerkas}
+                disabled={isLoading}
+              >
+                {isLoading ? 'Memuat...' : 'Tambah Berkas +'}
+              </button>
             </div>
 
-            {selectedSektor === 'Geologi' && renderTable(dataGeologi, setDataGeologi)}
-            {selectedSektor === 'Mineral' && renderTable(dataMineral, setDataMineral)}
-            {selectedSektor === 'Energi' && renderTable(dataEnergi, setDataEnergi)}
+            {isLoading ? (
+              <div className="loading-indicator">Memuat data berkas...</div>
+            ) : (
+              <>
+                {!selectedSektor ? (
+                  <>
+                    <h2>Geologi</h2>
+                    {renderTable(berkasData.Geologi)}
+                    
+                    <h2>Mineral</h2>
+                    {renderTable(berkasData.Mineral)}
+                    
+                    <h2>Energi</h2>
+                    {renderTable(berkasData.Energi)}
+                  </>
+                ) : (
+                  renderTable(berkasData[selectedSektor])
+                )}
+              </>
+            )}
           </div>
         </div>
         <Footer />

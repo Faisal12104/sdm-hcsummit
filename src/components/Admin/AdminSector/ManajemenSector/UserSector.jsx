@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars } from 'react-icons/fa';
 import './UserSector.css'; 
@@ -9,57 +9,106 @@ const UserSector = () => {
   const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [filter, setFilter] = useState('terbaru'); // default filter
+  const [filter, setFilter] = useState('terbaru');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [userList, setUserList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // List user
-  const [userList, setUserList] = useState([
-    { id: 1, nama: "User A", email: "a@email.com", perusahaan: "PT A", jabatan: "Staff", sektor: "Energi", role: "User", status: "approved", daftar:"24-02-2025 17:45:22", approve:"07-06-2025 23:52:12" },
-    { id: 2, nama: "User B", email: "b@email.com", perusahaan: "PT B", jabatan: "Manager", sektor: "Pertambangan", role: "User", status: "pending", daftar:"16-02-2025 12:45:22", approve:"-", },
-    { id: 3, nama: "User C", email: "c@email.com", perusahaan: "PT C", jabatan: "Staff", sektor: "Gas", role: "User", status: "rejected", daftar:"12-02-2025 20:45:22", approve:"22-06-2025 12:52:12" }
-  ]);
+  // Fetch users data on component mount
+  useEffect(() => {
+    const fetchUsers = async () => {
+      setIsLoading(true);
+      setError(null);
+      
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:3000/api/auth/adminsatker', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch users');
+        }
+        
+        const data = await response.json();
+        setUserList(data);
+      } catch (err) {
+        setError(err.message);
+        console.error('Error fetching users:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     navigate('/');
   };
   
-  // Fungsi tambah user baru
-  const addUser = () => {
-    const newId = userList.length > 0 ? userList[userList.length - 1].id + 1 : 1;
-    const newUser = {
-      id: newId,
-      nama: 'Nama Lengkap Baru',
-      email: 'email@contoh.com',
-      perusahaan: 'Perusahaan ABC',
-      jabatan: 'Staff',
-      sektor: 'Sektor Contoh',
-      role: 'User',
-      status: 'pending',
-      daftar: new Date().toLocaleString(),
-      approve: '-'
-    };
-    setUserList([...userList, newUser]);
+  // Handle approve/reject actions
+  const handleUserAction = async (id, action) => {
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:3000/api/auth/adminsatker/${id}/${action}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to ${action} user`);
+      }
+
+      // Update local state after successful action
+      setUserList(prevUsers => 
+        prevUsers.map(user =>
+          user.id === id
+            ? { 
+                ...user, 
+                status: action,
+                approve: action === 'approve' ? new Date().toLocaleString() : user.approve
+              }
+            : user
+        )
+      );
+    } catch (err) {
+      setError(err.message);
+      console.error(`Error ${action}ing user:`, err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  // Fungsi approve & reject
-  const handleApprove = (id) => {
-    setUserList(userList.map(user =>
-      user.id === id ? { ...user, status: 'approved', approve: new Date().toLocaleString() } : user
-    ));
-  };
-
-  const handleReject = (id) => {
-    setUserList(userList.map(user =>
-      user.id === id ? { ...user, status: 'rejected', approve: new Date().toLocaleString() } : user
-    ));
-  };
-
-  // Filter data
+  // Filter and search users
   const filteredUsers = userList.filter(user => {
+    // Apply status filter
     if (filter === 'approve') return user.status === 'approved';
     if (filter === 'reject') return user.status === 'rejected';
     if (filter === 'terbaru') return user.status === 'pending';
+    
     return true;
+  }).filter(user => {
+    // Apply search filter
+    if (!searchTerm) return true;
+    return (
+      user.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.perusahaan.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.jabatan.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.sektor.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   });
 
   return (
@@ -95,68 +144,99 @@ const UserSector = () => {
 
         <div className="manajemen-container">
           <div className="manajemen-content">
+            {error && <div className="error-message">{error}</div>}
+            
             <div className="toolbar">
-              <input type="text" placeholder="Search" className="search-input" />
-              <select value={filter} onChange={(e) => setFilter(e.target.value)} className="filter-select">
+              <input 
+                type="text" 
+                placeholder="Cari user..." 
+                className="search-input" 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <select 
+                value={filter} 
+                onChange={(e) => setFilter(e.target.value)} 
+                className="filter-select"
+                disabled={isLoading}
+              >
                 <option value="terbaru">Terbaru</option>
-                <option value="approve">Approve</option>
-                <option value="reject">Reject</option>
+                <option value="approve">Approved</option>
+                <option value="reject">Rejected</option>
               </select>
-              <button className="add-btn" onClick={addUser}>Tambah User +</button>
             </div>
 
-            <div className="table-wrapper">
-              <table className="data-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>NAMA LENGKAP</th>
-                    <th>EMAIL</th>
-                    <th>PERUSAHAAN</th>
-                    <th>JABATAN</th>
-                    <th>SEKTOR</th>
-                    <th>ROLE</th>
-                    <th>{filter === 'terbaru' ? 'AKSI' : 'STATUS'}</th>
-                    <th>TANGGAL DAFTAR</th>
-                    <th>TANGGAL APPROVE</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredUsers.map((user) => (
-                    <tr key={user.id}>
-                      <td>{user.id}</td>
-                      <td>{user.nama}</td>
-                      <td>{user.email}</td>
-                      <td>{user.perusahaan}</td>
-                      <td>{user.jabatan}</td>
-                      <td>{user.sektor}</td>
-                      <td>{user.role}</td>
-                      <td>
-                        {filter === 'terbaru' ? (
-                          <>
-                            <button className="approve-btn" onClick={() => handleApprove(user.id)}>Approve</button>
-                            <button className="reject-btn" onClick={() => handleReject(user.id)}>Reject</button>
-                          </>
-                        ) : (
-                          <>
-                            {user.status === "approved" && <span className="status-badge approved">Approved</span>}
-                            {user.status === "pending" && <span className="status-badge pending">Pending</span>}
-                            {user.status === "rejected" && <span className="status-badge rejected">Rejected</span>}
-                          </>
-                        )}
-                      </td>
-                      <td>{user.daftar}</td>
-                      <td>{user.approve}</td>
-                    </tr>
-                  ))}
-                  {filteredUsers.length === 0 && (
+            {isLoading ? (
+              <div className="loading-indicator">Memuat data user...</div>
+            ) : (
+              <div className="table-wrapper">
+                <table className="data-table">
+                  <thead>
                     <tr>
-                      <td colSpan="10" style={{ textAlign: 'center' }}>Tidak ada data</td>
+                      <th>ID</th>
+                      <th>NAMA LENGKAP</th>
+                      <th>EMAIL</th>
+                      <th>PERUSAHAAN</th>
+                      <th>JABATAN</th>
+                      <th>SEKTOR</th>
+                      <th>ROLE</th>
+                      <th>{filter === 'terbaru' ? 'AKSI' : 'STATUS'}</th>
+                      <th>TANGGAL DAFTAR</th>
+                      <th>TANGGAL APPROVE</th>
                     </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {filteredUsers.length > 0 ? (
+                      filteredUsers.map((user) => (
+                        <tr key={user.id}>
+                          <td>{user.id}</td>
+                          <td>{user.nama}</td>
+                          <td>{user.email}</td>
+                          <td>{user.perusahaan}</td>
+                          <td>{user.jabatan}</td>
+                          <td>{user.sektor}</td>
+                          <td>{user.role}</td>
+                          <td>
+                            {filter === 'terbaru' ? (
+                              <div className="action-buttons">
+                                <button 
+                                  className="approve-btn" 
+                                  onClick={() => handleUserAction(user.id, 'approve')}
+                                  disabled={isLoading}
+                                >
+                                  Approve
+                                </button>
+                                <button 
+                                  className="reject-btn" 
+                                  onClick={() => handleUserAction(user.id, 'reject')}
+                                  disabled={isLoading}
+                                >
+                                  Reject
+                                </button>
+                              </div>
+                            ) : (
+                              <span className={`status-badge ${user.status}`}>
+                                {user.status === "approved" && "Approved"}
+                                {user.status === "pending" && "Pending"}
+                                {user.status === "rejected" && "Rejected"}
+                              </span>
+                            )}
+                          </td>
+                          <td>{user.daftar}</td>
+                          <td>{user.approve || '-'}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="10" style={{ textAlign: 'center' }}>
+                          {searchTerm ? 'Tidak ada user yang sesuai' : 'Tidak ada data user'}
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         </div>
 

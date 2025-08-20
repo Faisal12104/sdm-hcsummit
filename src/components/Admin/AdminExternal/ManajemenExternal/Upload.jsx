@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   FaUser,
   FaUpload,
   FaSignOutAlt,
   FaCheckCircle,
-  FaBars
+  FaBars,
+  FaSpinner
 } from 'react-icons/fa';
 import './Upload.css';
 import Footer from '../../../Footer/Footer';
@@ -13,12 +14,111 @@ import esdmLogo from '../../../../assets/Logo_Kementerian_ESDM.png';
 
 const Upload = () => {
   const navigate = useNavigate();
-  const [isCollapsed, setIsCollapsed] = useState(false); // Sidebar collapse untuk desktop
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar toggle untuk mobile
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [sectors, setSectors] = useState([]);
+  const [formData, setFormData] = useState({
+    title: '',
+    sector: '',
+    file: null,
+    uploadDate: new Date().toLocaleDateString('id-ID')
+  });
+
+  // Fetch sectors on component mount
+  useEffect(() => {
+    fetchSectors();
+  }, []);
+
+  const fetchSectors = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:3000/api/sektor/tampilsektor', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Gagal mengambil data sektor');
+      }
+
+      const data = await response.json();
+      setSectors(data.data || []);
+    } catch (err) {
+      console.error('Error fetching sectors:', err);
+      setError('Gagal memuat data sektor');
+    }
+  };
 
   const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('token');
     navigate('/');
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleFileChange = (e) => {
+    setFormData(prev => ({
+      ...prev,
+      file: e.target.files[0]
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!formData.title || !formData.sector || !formData.file) {
+      setError('Semua field harus diisi');
+      return;
+    }
+
+    setIsUploading(true);
+    setError(null);
+    setSuccess(null);
+
+    try {
+      const token = localStorage.getItem('token');
+      const formDataToSend = new FormData();
+      formDataToSend.append('title', formData.title);
+      formDataToSend.append('sector', formData.sector);
+      formDataToSend.append('file', formData.file);
+
+      const response = await fetch('http://localhost:3000/api/berkas/upload', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formDataToSend
+      });
+
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.error || 'Gagal mengupload berkas');
+      }
+
+      setSuccess('Berkas berhasil diupload!');
+      setFormData({
+        title: '',
+        sector: '',
+        file: null,
+        uploadDate: new Date().toLocaleDateString('id-ID')
+      });
+    } catch (err) {
+      setError(err.message);
+      console.error('Upload error:', err);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -65,22 +165,79 @@ const Upload = () => {
 
         {/* Upload Form */}
         <div className="upload-form-container">
-          <form className="upload-form">
-            <label>Judul Berkas</label>
-            <input type="text" placeholder="Judul Berkas" />
+          <h2>Upload Berkas</h2>
+          
+          {error && <div className="alert error">{error}</div>}
+          {success && <div className="alert success">{success}</div>}
 
-            <label>Sektor</label>
-            <input type="text" placeholder="Sektor" />
-
-            <label>Upload File</label>
-            <div className="upload-file-group">
-              <input type="file" id="file-upload" />
+          <form className="upload-form" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="title">Judul Berkas</label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                placeholder="Judul Berkas"
+                value={formData.title}
+                onChange={handleInputChange}
+                required
+              />
             </div>
 
-            <label>Tanggal Upload</label>
-            <input type="text" value="24-08-2025" readOnly />
+            <div className="form-group">
+              <label htmlFor="sector">Sektor</label>
+              <select
+                id="sector"
+                name="sector"
+                value={formData.sector}
+                onChange={handleInputChange}
+                required
+              >
+                <option value="">Pilih Sektor</option>
+                {sectors.map(sector => (
+                  <option key={sector.id} value={sector.nama_sektor}>
+                    {sector.nama_sektor}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-            <button type="submit">Upload</button>
+            <div className="form-group">
+              <label htmlFor="file">Upload File</label>
+              <div className="upload-file-group">
+                <input
+                  type="file"
+                  id="file"
+                  accept=".csv"
+                  onChange={handleFileChange}
+                  required
+                />
+                {formData.file && (
+                  <div className="file-info">
+                    {formData.file.name} ({Math.round(formData.file.size / 1024)} KB)
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>Tanggal Upload</label>
+              <input
+                type="text"
+                value={formData.uploadDate}
+                readOnly
+              />
+            </div>
+
+            <button type="submit" disabled={isUploading}>
+              {isUploading ? (
+                <>
+                  <FaSpinner className="spinner" /> Mengupload...
+                </>
+              ) : (
+                'Upload'
+              )}
+            </button>
           </form>
         </div>
 

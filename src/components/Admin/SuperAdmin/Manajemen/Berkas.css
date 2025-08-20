@@ -67,13 +67,17 @@
   flex: 1;
   overflow-x: auto;
   border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
 .data-table {
-  min-width: 600px;
   width: 100%;
   border-collapse: collapse;
   background-color: #fff3cc;
+  table-layout: fixed;
+  word-wrap: break-word;
 }
 
 .data-table th,
@@ -81,6 +85,8 @@
   padding: 8px 12px;
   text-align: left;
   border: 1px solid #e2c267;
+  word-break: break-word;
+  min-width: 0;
 }
 
 .data-table th {
