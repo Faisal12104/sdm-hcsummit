@@ -104,11 +104,16 @@
   cursor: pointer;
   display: flex;
   align-items: center;
+  position: relative;
+  z-index: 1001;
+  margin-bottom: 80px; /* Add space to avoid footer overlap */
 }
 
 .logout-button span {
   margin-left: 8px;
 }
+
+/* Ensure sidebar has higher z-index than footer */
 
 /* Burger btn */
 .burger-btn {
@@ -131,9 +136,12 @@
   flex: 1;
   background-color: #f9ae27;
   display: flex;
-    overflow-y: auto;
+  overflow-y: auto;
   flex-direction: column;
   padding: 24px;
+  margin-bottom: 60px; /* Add margin to prevent footer overlap */
+  position: relative;
+  z-index: 1;
 }
 
 .header-right {

@@ -14,32 +14,40 @@ import esdmLogo from '../../../assets/Logo_Kementerian_ESDM.png';
 
 const AdminExternal = () => {
   const navigate = useNavigate();
-    const [isCollapsed, setIsCollapsed] = useState(false);
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  
-    // State untuk data user
-    const [user, setUser] = useState({
-      name: '',
-      email: '',
-      phone: '',
-      sektor: '',
-      jabatan: '',
-      perusahaan: ''
-    });
-  
-    useEffect(() => {
-      // Ambil data user dari localStorage
-      const storedUser = localStorage.getItem('user');
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // State untuk data user
+  const [user, setUser] = useState({
+    id: '',
+    name: '',
+    email: '',
+    phone: '',
+    sektor: '',
+    jabatan: '',
+    perusahaan: ''
+  });
+
+  useEffect(() => {
+    // Ambil data user ID dari localStorage
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      if (parsedUser.id) {
+        // 🔑 Panggil API pakai ID
+        fetch(`http://localhost:3000/api/user`)
+          .then(res => res.json())
+          .then(data => setUser(data))
+          .catch(err => console.error(err));
       }
-    }, []);
-  
-    const handleLogout = () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('user');
-      navigate('/');
-    };
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('user');
+    navigate('/');
+  };
 
   return (
     <div className="dashboard-external">
@@ -75,7 +83,7 @@ const AdminExternal = () => {
       </aside>
 
       {/* Main Content */}
-        <main className="main-content">
+      <main className="main-content">
         <div className="header-right">
           <button className="burger-btn mobile-only" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
             <FaBars size={20} />

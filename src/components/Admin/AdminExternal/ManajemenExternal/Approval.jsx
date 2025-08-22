@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   FaUser,
@@ -13,11 +13,41 @@ import esdmLogo from '../../../../assets/Logo_Kementerian_ESDM.png';
 
 const Approval = () => {
   const navigate = useNavigate();
-  const [isCollapsed, setIsCollapsed] = useState(false); // Sidebar collapse (desktop)
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar toggle (mobile)
+  const [isCollapsed, setIsCollapsed] = useState(false); 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
+
+  // State untuk data API
+  const [users, setUsers] = useState([]);
+  const [files, setFiles] = useState([]);
+
+  // Ambil token login dari localStorage
+  const token = localStorage.getItem('token');
+
+  // Panggil API saat komponen load
+  useEffect(() => {
+    // Contoh endpoint API (ganti sesuai backend kamu)
+    fetch('http://localhost:3000/api/user', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(res => res.json())
+      .then(data => setUsers(data))
+      .catch(err => console.error(err));
+
+    fetch('http://localhost:3000/api/berkas', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(res => res.json())
+      .then(data => setFiles(data))
+      .catch(err => console.error(err));
+  }, [token]);
 
   const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('token');
     navigate('/');
   };
 
@@ -56,7 +86,6 @@ const Approval = () => {
 
       {/* Main Content */}
       <main className="main-content">
-        {/* Header Right (for mobile) */}
         <div className="header-right">
           <button className="burger-btn mobile-only" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
             <FaBars size={20} />
@@ -64,7 +93,6 @@ const Approval = () => {
           <span>HI, External!</span>
         </div>
 
-        {/* Content Wrapper */}
         <div className="content-wrapper">
           {/* Approval User Table */}
           <div className="approval-table">
@@ -79,18 +107,18 @@ const Approval = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>2</td>
-                  <td>rahayu@gmail.com</td>
-                  <td>Mineral</td>
-                  <td><span className="status approved">Approved</span></td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>radian@gmail.com</td>
-                  <td>Geologi</td>
-                  <td><span className="status rejected">Rejected</span></td>
-                </tr>
+                {users.map((user) => (
+                  <tr key={user.id}>
+                    <td>{user.id}</td>
+                    <td>{user.email}</td>
+                    <td>{user.sektor}</td>
+                    <td>
+                      <span className={`status ${user.status.toLowerCase()}`}>
+                        {user.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -107,16 +135,17 @@ const Approval = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>contoh.pdf</td>
-                  <td>24-08-2025</td>
-                  <td><span className="status approved">Approved</span></td>
-                </tr>
-                <tr>
-                  <td>Lagi.pdf</td>
-                  <td>12-12-2025</td>
-                  <td><span className="status rejected">Rejected</span></td>
-                </tr>
+                {files.map((file) => (
+                  <tr key={file.id}>
+                    <td>{file.nama}</td>
+                    <td>{file.tanggal_upload}</td>
+                    <td>
+                      <span className={`status ${file.status.toLowerCase()}`}>
+                        {file.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

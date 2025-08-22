@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaBuilding, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars } from 'react-icons/fa';
 import './Sektor.css';
@@ -10,18 +10,28 @@ const Sektor = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Awalnya kosong
+  // Data sektor dari API
   const [sektorList, setSektorList] = useState([]);
+  const [search, setSearch] = useState('');
+
+  const token = localStorage.getItem('token'); // kalau pakai JWT
+
+  // Ambil data sektor dari API
+  useEffect(() => {
+    fetch('http://localhost:3000/api/sektor', {
+      headers: {
+        Authorization: `Bearer ${token}`, // hapus baris ini kalau API kamu nggak pakai auth
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setSektorList(data))
+      .catch((err) => console.error('Gagal ambil sektor:', err));
+  }, [token]);
 
   const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('token');
     navigate('/');
-  };
-
-  const addSektor = () => {
-    const newId = sektorList.length > 0 ? sektorList[sektorList.length - 1].id + 1 : 1;
-    const newSektor = { id: newId, nama: 'Sektor Baru' };
-    setSektorList([...sektorList, newSektor]);
   };
 
   return (
@@ -59,27 +69,36 @@ const Sektor = () => {
         <div className="manajemen-container">
           <div className="manajemen-content">
             <div className="toolbar">
-              <input type="text" placeholder="Search" className="search-input" />
-              <button className="add-btn" onClick={addSektor}>Tambah Sektor +</button>
+              <input
+                type="text"
+                placeholder="Search"
+                className="search-input"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
             </div>
 
-            <div className="table-wrapper"> 
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>SEKTOR</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sektorList.map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.id}</td>
-                    <td>{item.nama}</td>
+            <div className="table-wrapper">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>SEKTOR</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {sektorList
+                    .filter((item) =>
+                      item.nama.toLowerCase().includes(search.toLowerCase())
+                    )
+                    .map((item) => (
+                      <tr key={item.id}>
+                        <td>{item.id}</td>
+                        <td>{item.nama}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

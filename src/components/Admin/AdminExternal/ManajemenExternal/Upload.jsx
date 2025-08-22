@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   FaUser,
@@ -19,39 +19,12 @@ const Upload = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const [sectors, setSectors] = useState([]);
   const [formData, setFormData] = useState({
     title: '',
     sector: '',
     file: null,
     uploadDate: new Date().toLocaleDateString('id-ID')
   });
-
-  // Fetch sectors on component mount
-  useEffect(() => {
-    fetchSectors();
-  }, []);
-
-  const fetchSectors = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/sektor/tampilsektor', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error('Gagal mengambil data sektor');
-      }
-
-      const data = await response.json();
-      setSectors(data.data || []);
-    } catch (err) {
-      console.error('Error fetching sectors:', err);
-      setError('Gagal memuat data sektor');
-    }
-  };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -186,20 +159,15 @@ const Upload = () => {
 
             <div className="form-group">
               <label htmlFor="sector">Sektor</label>
-              <select
+              <input
+                type="text"
                 id="sector"
                 name="sector"
+                placeholder="Masukkan nama sektor"
                 value={formData.sector}
                 onChange={handleInputChange}
                 required
-              >
-                <option value="">Pilih Sektor</option>
-                {sectors.map(sector => (
-                  <option key={sector.id} value={sector.nama_sektor}>
-                    {sector.nama_sektor}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
 
             <div className="form-group">
