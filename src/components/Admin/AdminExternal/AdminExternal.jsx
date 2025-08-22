@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   FaUser,
@@ -17,9 +17,7 @@ const AdminExternal = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // State untuk data user
   const [user, setUser] = useState({
-    id: '',
     name: '',
     email: '',
     phone: '',
@@ -29,17 +27,9 @@ const AdminExternal = () => {
   });
 
   useEffect(() => {
-    // Ambil data user ID dari localStorage
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      if (parsedUser.id) {
-        // 🔑 Panggil API pakai ID
-        fetch(`http://localhost:3000/api/user`)
-          .then(res => res.json())
-          .then(data => setUser(data))
-          .catch(err => console.error(err));
-      }
+      setUser(JSON.parse(storedUser));
     }
   }, []);
 
@@ -131,7 +121,7 @@ const AdminExternal = () => {
           </div>
 
           <div className="email-section">
-            <div className="section-title">My email Address</div>
+            <div className="section-title">My Email Address</div>
             <div className="email-item">
               <FaEnvelope className="email-icon" />
               <div>
