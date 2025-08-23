@@ -154,18 +154,13 @@
 }
 
 .header-right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 20px;
-  background-color: #f6d779;
-  border-bottom: 1px solid #e0c85b;
+  font-weight: bold;      /* teks tebal */
+  text-align: right;      /* teks rata kanan */
+  padding-right: 20px;    /* spasi dari tepi kanan */
+  gap: 12px;              /* kasih jarak antar item (misal icon + teks) */
+  align-items: center;    /* biar rata tengah vertikal */
 }
 
-
-.header-right span {
-  font-weight: bold;
-}
 
 .stats {
   display: flex;

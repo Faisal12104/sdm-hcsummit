@@ -129,19 +129,7 @@
   padding: 24px;
 }
 
-.header-right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 20px;
-  background-color: #f6d779;
-  border-bottom: 1px solid #e0c85b;
-}
 
-
-.header-right span {
-  font-weight: bold;
-}
 
 .stats {
   display: flex;
