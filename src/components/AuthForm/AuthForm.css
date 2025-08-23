@@ -57,7 +57,7 @@
   font-size: 18px;
   font-weight: 600;
   color: #333;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
   text-transform: uppercase;
 }
 
@@ -65,48 +65,97 @@
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px; /* beri jarak antar field */
 }
 
 /* Input Group */
 .auth-input-group {
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
 }
 
 .auth-input-label {
-  display: block;
-  margin-bottom: 6px;
   font-size: 14px;
   color: #444;
   font-weight: 500;
+  flex: 1;
+  min-width: 0;
 }
 
+/* Default input */
 .auth-input {
-  padding: 12px 11px;
+  padding: 12px 14px;
   border: 1.5px solid #ddd;
   border-radius: 8px;
   font-size: 14px;
-  width: 100%;             /* penuh kalau single */
-  flex: 1;                 /* bisa fleksibel kalau dalam flex container */
-  min-width: 0;            /* biar nggak meledak saat flex */
   transition: all 0.3s ease;
+  background-color: #fafafa;
+  color: #222;
+  flex: 1;        /* biar fleksibel di dalam flex container */
+  min-width: 0; 
 }
 
+.input {
+    padding: 12px 14px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
+  color: #222;
+  flex: 1;        /* biar fleksibel di dalam flex container */
+  min-width: 0;
+}
+
+.auth-input::placeholder {
+  color: #aaa;
+  font-size: 13px;
+  flex: 1;
+}
+
+/* Hover */
+.auth-input:hover {
+  border-color: #bbb;
+  background-color: #fff;
+}
+
+/* Focus */
 .auth-input:focus {
   border-color: #FFB823;
-  box-shadow: 0 0 0 2px rgba(255, 184, 35, 0.2);
+  box-shadow: 0 0 0 2px rgba(255, 184, 35, 0.25);
   outline: none;
+  background-color: #fff;
 }
 
-.auth-input:focus {
-  border-color: #FFB823;
-  box-shadow: 0 0 0 2px rgba(255, 184, 35, 0.2);
-  outline: none;
+/* Error State */
+.auth-input.error {
+  border-color: #e74c3c;
+  background-color: #fff5f5;
 }
 
-/* Password Toggle */
+.auth-input.error:focus {
+  box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.25);
+}
+
+/* Success State */
+.auth-input.success {
+  border-color: #2ecc71;
+  background-color: #f6fffa;
+}
+
+.auth-input.success:focus {
+  box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.25);
+}
+
+/* Password Container */
 .password-input-container {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .password-toggle {
@@ -137,7 +186,7 @@
   font-weight: 600;
   border-radius: 8px;
   cursor: pointer;
-  margin-top: 12px;
+  margin-top: 8px;
   transition: background-color 0.3s ease, transform 0.1s ease;
   width: 100%;
 }
@@ -155,7 +204,7 @@
 
 /* Switch Text */
 .auth-switch-text {
-  margin-top: 18px;
+  margin-top: 16px;
   font-size: 14px;
   color: #666;
 }
@@ -164,6 +213,7 @@
   color: #FFB823;
   text-decoration: none;
   font-weight: 600;
+  cursor: pointer;
 }
 
 .auth-switch-link:hover {
@@ -205,42 +255,42 @@
   .auth-container {
     padding: 25px 18px;
   }
-  
+
   .auth-title {
     font-size: 22px;
   }
-  
+
   .auth-subtitle {
     font-size: 14px;
   }
-  
+
   .auth-active-tab-title {
     font-size: 16px;
     margin-bottom: 14px;
   }
-  
+
   .auth-input {
     padding: 10px 12px;
     font-size: 13px;
   }
-  
+
   .auth-input-label {
     font-size: 13px;
   }
-  
+
   .auth-button {
     padding: 12px;
     font-size: 15px;
   }
-  
+
   .auth-switch-text {
     font-size: 13px;
   }
-  
+
   .password-toggle {
     font-size: 14px;
   }
-  
+
   .terms-checkbox-group label {
     font-size: 13px;
   }

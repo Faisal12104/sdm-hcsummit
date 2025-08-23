@@ -1,163 +1,146 @@
 .dashboard-usersector {
   display: flex;
   height: 100vh;
-  font-family: sans-serif;
-  min-height: 0;
+  font-family: Arial, sans-serif;
 }
 
-.manajemen-container {
+.sidebar {
+  background-color: #fde8a3;
+  width: 220px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+}
+.sidebar-logo {
+  width: 40px;
+  height: auto;
+}
+.nav-links button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: none;
+  padding: 10px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+.nav-links button:hover,
+.nav-links .active-link {
+  background-color: #f9ae27;
+  border-radius: 6px;
+}
+.logout-button {
+  background: none;
+  border: none;
+  color: #d32f2f;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+/* Main */
+.main-content {
   flex: 1;
   background-color: #f9ae27;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  padding: 24px;
-  min-height: 0;
 }
-
-.header-top {
-  text-align: right;
+.header-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
   font-weight: bold;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
-.manajemen-content {
-  background-color: #fde8a3;
-  padding: 16px;
-  border-radius: 8px;
-  flex: 1; /* NEW: isi ruang kosong, dorong footer ke bawah */
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
+/* Toolbar */
 .toolbar {
   display: flex;
   justify-content: space-between;
   margin-bottom: 12px;
 }
-
 .search-input {
   padding: 6px 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid #333;
 }
-
-.add-btn {
-  background-color: #f7c02d;
-  border: none;
+.filter-select {
   padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
+  border: 1px solid #333;
 }
 
+/* Table */
 .table-wrapper {
-  overflow-x: auto;
+  flex: 1;
+  overflow-y: auto;
 }
-
-
 .data-table {
-min-width: 600px;
   width: 100%;
   border-collapse: collapse;
-  background-color: #fff3cc;
+  background: #fff3cc;
 }
-
-.data-table th, .data-table td {
-  padding: 8px 12px;
-  text-align: left;
-  border: 1px solid #e2c267;
+.data-table th,
+.data-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
 }
-
 .data-table th {
-  background-color: #fcd062;
+  background: #fcd062;
   font-weight: bold;
 }
 
-.icon-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  margin-right: 6px;
-  color: #333;
-  font-size: 16px;
+.action-buttons {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
 }
-
-.icon-btn:last-child {
-  margin-right: 0;
-}
-
-/* Responsive toolbar */
-@media (max-width: 600px) {
-  .toolbar {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .add-btn {
-    width: 100%;
-  }
-}
-
-.sidebar-logo{
-  width: 100%;
-  max-width: 35px;  /* batas maksimal ukuran agar tidak terlalu besar */
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
-
 .approve-btn {
-  background-color: #4caf50; /* Hijau */
+  background: #4caf50;
   color: white;
   border: none;
   padding: 6px 12px;
   border-radius: 6px;
-  font-weight: bold;
   cursor: pointer;
-  margin-right: 6px;
   font-size: 13px;
 }
-
 .reject-btn {
-  background-color: #fdecec; /* Merah muda */
+  background: #fdecec;
   color: #d32f2f;
   border: none;
   padding: 6px 12px;
   border-radius: 6px;
-  font-weight: bold;
   cursor: pointer;
   font-size: 13px;
 }
-
-/* Efek hover opsional */
-.approve-btn:hover {
-  background-color: #45a049;
-}
-
-.reject-btn:hover {
-  background-color: #fbd5d5;
-}
-
 .status-badge {
   padding: 6px 12px;
   border-radius: 6px;
   font-weight: bold;
-  display: inline-block;
   font-size: 13px;
 }
-
 .status-badge.approved {
-  background-color: #4caf50;
+  background: #4caf50;
   color: white;
 }
-
 .status-badge.rejected {
-  background-color: #fdecec;
+  background: #fdecec;
   color: #d32f2f;
 }
-
 .status-badge.pending {
-  background-color: #fff3cd;
+  background: #fff3cd;
   color: #856404;
 }

@@ -22,9 +22,10 @@ const BerkasSector = () => {
       
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:3000/api/berkas/satker', {
+        const response = await fetch('http://localhost:3000/api/berkas/satker?sektorId=3', {
           headers: {
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
           }
         });
         
@@ -32,8 +33,9 @@ const BerkasSector = () => {
           throw new Error('Failed to fetch berkas data');
         }
         
-        const data = await response.json();
-        setBerkasList(data);
+        const result = await response.json();
+        // backend kirim { data: [...] }
+        setBerkasList(result.data || []);
       } catch (err) {
         setError(err.message);
         console.error('Error fetching berkas:', err);
@@ -51,13 +53,40 @@ const BerkasSector = () => {
     navigate('/');
   };
 
-  const handleEdit = (id) => {
-    navigate(`/berkassector/edit/${id}`);
+  // update status berkas
+  const handleEdit = async (id) => {
+    try {
+      setIsLoading(true);
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:3000/api/berkas/satker', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ berkasId: id, status: 'Approved' }) // contoh update ke Approved
+      });
+
+      if (!response.ok) {
+        throw new Error('Gagal update status berkas');
+      }
+
+      const result = await response.json();
+      // update state biar tabel ikut berubah
+      setBerkasList(prev =>
+        prev.map(b => (b.id === id ? { ...b, status: result.data.status } : b))
+      );
+    } catch (err) {
+      console.error('Error updating berkas:', err);
+      alert(err.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  // Filter berkas based on search term
+  // Filter berkas berdasarkan search
   const filteredBerkas = berkasList.filter(berkas =>
-    berkas.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    berkas.nama_file.toLowerCase().includes(searchTerm.toLowerCase()) ||
     berkas.id.toString().includes(searchTerm)
   );
 
@@ -112,7 +141,7 @@ const BerkasSector = () => {
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>EMAIL</th>
+                      <th>NAMA FILE</th>
                       <th>STATUS</th>
                       <th>AKSI</th>
                     </tr>
@@ -122,22 +151,18 @@ const BerkasSector = () => {
                       filteredBerkas.map((berkas) => (
                         <tr key={berkas.id}>
                           <td>{berkas.id}</td>
-                          <td>{berkas.email}</td>
+                          <td>{berkas.nama_file}</td>
                           <td>
                             <span
                               className={`status ${
-                                berkas.status === 'approved'
+                                berkas.status.toLowerCase() === 'approved'
                                   ? 'approved'
-                                  : berkas.status === 'rejected'
+                                  : berkas.status.toLowerCase() === 'rejected'
                                   ? 'rejected'
                                   : 'pending'
                               }`}
                             >
-                              {berkas.status === 'approved'
-                                ? 'Approved'
-                                : berkas.status === 'rejected'
-                                ? 'Rejected'
-                                : 'Pending'}
+                              {berkas.status}
                             </span>
                           </td>
                           <td>
@@ -146,7 +171,7 @@ const BerkasSector = () => {
                               onClick={() => handleEdit(berkas.id)}
                               disabled={isLoading}
                             >
-                              <FaEdit /> Edit
+                              <FaEdit /> Approve
                             </button>
                           </td>
                         </tr>

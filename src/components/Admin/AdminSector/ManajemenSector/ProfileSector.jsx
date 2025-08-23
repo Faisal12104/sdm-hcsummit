@@ -1,19 +1,20 @@
-import React, {useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'; 
 import { useNavigate } from 'react-router-dom';
-import {
-  FaUser, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars, FaEnvelope
-} from 'react-icons/fa';
+import { FaUser, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars, FaEnvelope } from 'react-icons/fa';
 import './ProfileSector.css';
 import Footer from '../../../Footer/Footer';
 import esdmLogo from '../../../../assets/Logo_Kementerian_ESDM.png';
+import axios from 'axios';
 
 const ProfileSector = () => {
   const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   // State untuk data user
   const [user, setUser] = useState({
+    id: null,
     name: '',
     email: '',
     phone: '',
@@ -22,11 +23,23 @@ const ProfileSector = () => {
     perusahaan: ''
   });
 
+  // State untuk input form sementara
+  const [formData, setFormData] = useState({ ...user });
+
   useEffect(() => {
-    // Ambil data user dari localStorage
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const u = JSON.parse(storedUser);
+      setUser(u);
+      setFormData({
+        id: u.id,
+        name: u.name,
+        email: u.email,
+        phone: u.phone,
+        sektor: u.sektor,
+        jabatan: u.jabatan,
+        perusahaan: u.perusahaan
+      });
     }
   }, []);
 
@@ -36,12 +49,54 @@ const ProfileSector = () => {
     navigate('/');
   };
 
+  const handleEditToggle = () => {
+    setIsEditing(!isEditing);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const payload = {
+        userId: formData.id,
+        nama_lengkap: formData.name,
+        email: formData.email,
+        no_telp: formData.phone,
+        sektor: formData.sektor,
+        perusahaan: formData.perusahaan,
+        jabatan: formData.jabatan
+      };
+
+      const response = await axios.put('http://localhost:3000/api/auth/profilesatker/update', payload);
+      
+      const updatedUser = {
+        id: response.data.user.id,
+        name: response.data.user.nama_lengkap,
+        email: response.data.user.email,
+        phone: response.data.user.no_telp,
+        sektor: response.data.user.sektor,
+        jabatan: response.data.user.jabatan,
+        perusahaan: response.data.user.perusahaan
+      };
+
+      setUser(updatedUser);
+      setFormData(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      setIsEditing(false);
+      alert('Profil berhasil diperbarui!');
+    } catch (error) {
+      console.error('Update profil error:', error.response?.data || error.message);
+      alert(error.response?.data?.error || 'Terjadi kesalahan saat update profil');
+    }
+  };
+
   return (
     <div className="dashboard-profilesector">
-      {/* Sidebar */}
       <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${isSidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
-          {/* Burger btn desktop */}
           <button className="burger-btn desktop-only" onClick={() => setIsCollapsed(!isCollapsed)}>
             <FaBars size={20} />
           </button>
@@ -59,8 +114,7 @@ const ProfileSector = () => {
         </button>
       </aside>
 
-      {/* Main content */}
-<main className="main-content">
+      <main className="main-content">
         <div className="header-right">
           <button className="burger-btn mobile-only" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
             <FaBars size={20} />
@@ -77,34 +131,37 @@ const ProfileSector = () => {
                 <div className="profile-email">{user.email}</div>
               </div>
             </div>
-            <button className="edit-btn">Edit</button>
+            <button className="edit-btn" onClick={handleEditToggle}>{isEditing ? 'Cancel' : 'Edit'}</button>
           </div>
 
           <div className="profile-form">
             <div className="form-row">
               <div className="form-group">
                 <label>Nama Lengkap</label>
-                <input type="text" value={user.name} readOnly />
+                <input type="text" name="name" value={formData.name} onChange={handleChange} readOnly={!isEditing} />
               </div>
               <div className="form-group">
                 <label>Nomor Hp</label>
-                <input type="text" value={user.phone} readOnly />
+                <input type="text" name="phone" value={formData.phone} onChange={handleChange} readOnly={!isEditing} />
               </div>
             </div>
             <div className="form-row">
               <div className="form-group">
                 <label>Sektor</label>
-                <input type="text" value={user.sektor} readOnly />
+                <input type="text" name="sektor" value={formData.sektor} onChange={handleChange} readOnly={!isEditing} />
               </div>
               <div className="form-group">
                 <label>Jabatan</label>
-                <input type="text" value={user.jabatan} readOnly />
+                <input type="text" name="jabatan" value={formData.jabatan} onChange={handleChange} readOnly={!isEditing} />
               </div>
             </div>
             <div className="form-group full-width">
               <label>Perusahaan</label>
-              <input type="text" value={user.perusahaan} readOnly />
+              <input type="text" name="perusahaan" value={formData.perusahaan} onChange={handleChange} readOnly={!isEditing} />
             </div>
+            {isEditing && (
+              <button className="save-btn" onClick={handleSubmit}>Save Changes</button>
+            )}
           </div>
 
           <div className="email-section">
