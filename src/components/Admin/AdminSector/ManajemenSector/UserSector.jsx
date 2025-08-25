@@ -139,8 +139,10 @@ const UserSector = () => {
     });
 
   return (
-    <div className="dashboard-berkassector">
-      <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${isSidebarOpen ? 'open' : ''}`}>
+    <div className="dashboard-usersector">
+      {/* Sidebar */}
+      <aside className={`sidebar ${isSidebarOpen ? "open" : ""} ${isCollapsed ? "collapsed" : ""}`}>
+
         <div className="sidebar-header">
           <button className="burger-btn desktop-only" onClick={() => setIsCollapsed(!isCollapsed)}>
             <FaBars size={20} />
@@ -149,20 +151,31 @@ const UserSector = () => {
           <span>BPSDM ESDM</span>
         </div>
         <nav className="nav-links">
-          <button onClick={() => navigate('/AdminSector')}><FaHome /><span>Dashboard</span></button>
-          <button className="active-link"onClick={() => navigate('/usersector')}><FaUser /><span>Manajemen User</span></button>
-          <button onClick={() => navigate('/berkassector')}><FaFileAlt /><span>Manajemen Berkas</span></button>
-          <button onClick={() => navigate('/profilesector')}><FaUserCircle /><span>Profile</span></button>
+          <button onClick={() => navigate("/AdminSector")}>
+            <FaHome /> <span>Dashboard</span>
+          </button>
+          <button className="active-link" onClick={() => navigate("/usersector")}>
+            <FaUser /> <span>Manajemen User</span>
+          </button>
+          <button onClick={() => navigate("/berkassector")}>
+            <FaFileAlt /> <span>Manajemen Berkas</span>
+          </button>
+          <button onClick={() => navigate("/profilesector")}>
+            <FaUserCircle /> <span>Profile</span>
+          </button>
         </nav>
         <button onClick={handleLogout} className="logout-button">
-          <FaSignOutAlt /><span>LOGOUT</span>
+          <FaSignOutAlt /> <span>LOGOUT</span>
         </button>
       </aside>
 
       {/* Main */}
       <main className="main-content">
         <div className="header-right">
-          <span>HI, ADMIN!</span>
+             <button className="burger-btn mobile-only" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+                 <FaBars size={20} />
+              </button>
+           <span>HI ADMIN!</span>
         </div>
 
         <div className="manajemen-container">
@@ -174,15 +187,24 @@ const UserSector = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
+            <div className="toolbar-right">
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
               className="filter-select"
             >
-              <option value="pending">Pending</option>
+              <option value="pending">Filter</option>
               <option value="approve">Approved</option>
               <option value="reject">Rejected</option>
             </select>
+
+            <button
+              className="add-button"
+              onClick={() => navigate('/berkas/add')} // sesuaikan route/fungsi
+            >
+              Tambah User +
+            </button>
+          </div>
           </div>
 
           {isLoading ? (

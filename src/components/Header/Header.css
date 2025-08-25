@@ -1,15 +1,33 @@
 .header {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 100;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: #fde8a3; /* sesuai tema */
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 20px 50px;
-  background-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
+  justify-content: space-between;
+  padding: 0 16px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  z-index: 1000;
+  width: 100%;
 }
+
+
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.dashboard-useradmin {
+  display: flex;
+  flex: 1;
+  margin-top: 60px; /* biar tidak ketutup header */
+}
+
 
 .logo-container {
   display: flex;

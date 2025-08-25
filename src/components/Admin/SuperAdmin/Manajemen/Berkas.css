@@ -15,17 +15,19 @@
   min-height: 0;
 }
 
-
+.header-top {
+  text-align: right;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
 
 .manajemen-content {
-  background-color: #fde8a3;
   padding: 16px;
   border-radius: 8px;
   flex: 1; /* isi ruang kosong, dorong footer ke bawah */
   display: flex;
   flex-direction: column;
   min-height: 0;
-  gap: 12px;
 }
 
 /* Toolbar */
@@ -39,11 +41,11 @@
 
 .search-input {
   padding: 6px 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  flex: 1;
-  min-width: 160px;
+  font-size: 14px;
+  flex: 0 0 50%; /* lebar 50% */
+  max-width: 50%;
 }
+
 
 .add-btn {
   background-color: #f7c02d;

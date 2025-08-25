@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaBuilding, FaFileAlt, FaSignOutAlt, FaHome, FaUserCircle, FaBars } from 'react-icons/fa';
 import './Sektor.css';
@@ -14,19 +14,16 @@ const Sektor = () => {
   const [sektorList, setSektorList] = useState([]);
   const [search, setSearch] = useState('');
 
-  const token = localStorage.getItem('token'); // kalau pakai JWT
-
   // Ambil data sektor dari API
   useEffect(() => {
-    fetch('http://localhost:3000/api/sektor', {
-      headers: {
-        Authorization: `Bearer ${token}`, // hapus baris ini kalau API kamu nggak pakai auth
-      },
-    })
+    fetch('http://localhost:3000/api/sektor/tampilsektor')
       .then((res) => res.json())
-      .then((data) => setSektorList(data))
+      .then((result) => {
+        // karena API mengembalikan { data: [...] }
+        setSektorList(result.data || []);
+      })
       .catch((err) => console.error('Gagal ambil sektor:', err));
-  }, [token]);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
@@ -89,12 +86,12 @@ const Sektor = () => {
                 <tbody>
                   {sektorList
                     .filter((item) =>
-                      item.nama.toLowerCase().includes(search.toLowerCase())
+                      item.nama_sektor.toLowerCase().includes(search.toLowerCase())
                     )
                     .map((item) => (
                       <tr key={item.id}>
                         <td>{item.id}</td>
-                        <td>{item.nama}</td>
+                        <td>{item.nama_sektor}</td>
                       </tr>
                     ))}
                 </tbody>

@@ -6,26 +6,6 @@
 }
 
 
-/* === Container Layout === */
-.manajemen-container {
-  flex: 1;
-  background-color: #f9ae27;
-  display: flex;
-  flex-direction: column;
-  padding: 24px;
-  min-height: 0;
-}
-
-.manajemen-content {
-  background-color: #fde8a3;
-  padding: 20px;
-  border-radius: 8px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
 .table-wrapper {
   overflow-x: auto;
   flex: 1;
@@ -35,7 +15,6 @@
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: #fff6d6;
   font-size: 15px;
   border-radius: 8px;
   overflow: hidden;
@@ -66,48 +45,24 @@
   display: inline-block;
 }
 
-
-.status-badge.approved {
-  background-color: #4caf50;
-  color: white;
-}
-
-.status-badge.rejected {
-  background-color: #fdecec;
-  color: #d32f2f;
-}
-
-.status-badge.pending {
-  background-color: #fff3cd;
-  color: #856404;
-}
-
-/* === Edit Button with Icon === */
-.icon-btn {
-  background: none;
+.filter-select {
+  padding: 6px 10px;
+  background-color: #fcd062;
   border: none;
   cursor: pointer;
-  padding: 4px;
-  color: #007bff;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  border-radius: 4px;
+  font-weight: bold;
 }
 
-.icon-btn:hover {
-  color: #0056b3;
+.add-button {
+  padding: 6px 10px;
+  background-color: #fcd062;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
 }
 
-/* === Responsive === */
-@media (max-width: 600px) {
-  .toolbar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .add-btn,
-  .search-input {
-    width: 100%;
-  }
+.add-button:hover {
+  background-color: #f6d779;
 }

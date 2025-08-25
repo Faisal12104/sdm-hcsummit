@@ -18,23 +18,8 @@
   transition: width 0.3s ease, transform 0.3s ease;
 }
 
-.sidebar-logo{
-  width: 100%;
-  max-width: 40px;  /* batas maksimal ukuran agar tidak terlalu besar */
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
-
-
-/* Collapsed sidebar (mini mode) di desktop */
-.sidebar.collapsed {
-  width: 60px;
-}
-
 /* Nav link text hilang saat collapsed */
-.sidebar.collapsed .nav-links button span,
-.sidebar.collapsed .sidebar-header span {
+.sidebar.collapsed .nav-links button span{
   display: none;
 }
 
@@ -115,6 +100,16 @@
   padding: 24px;
 }
 
+.header-right {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px;
+}
+
+
+.header-right span {
+  font-weight: bold;
+}
 
 
 

@@ -7,11 +7,10 @@ import {
   FaSignOutAlt,
   FaHome,
   FaUserCircle,
-  FaBars,
 } from 'react-icons/fa';
 import './SuperAdmin.css';
 import Footer from '../../Footer/Footer';
-import esdmLogo from '../../../assets/Logo_Kementerian_ESDM.png';
+import Header from '../../Header/Header'; // ✅ pakai header
 import struktur from '../../../assets/struktur.png';
 
 const SuperAdmin = () => {
@@ -26,14 +25,18 @@ const SuperAdmin = () => {
 
   return (
     <div className="dashboard-super">
+      {/* Header panggil dari Header.jsx */}
+      <Header
+        isLoggedIn={true}
+        onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+      />
+
       {/* Sidebar */}
       <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${isSidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
           <button className="burger-btn desktop-only" onClick={() => setIsCollapsed(!isCollapsed)}>
-            <FaBars size={20} />
+            ☰
           </button>
-          <img src={esdmLogo} alt="Kementerian ESDM" className="sidebar-logo" />
-          {!isCollapsed && <span className="logo-text">BPSDM ESDM</span>}
         </div>
 
         <nav className="nav-links">
@@ -67,12 +70,7 @@ const SuperAdmin = () => {
 
       {/* Main Content */}
       <main className="main-content">
-        <div className="header-right">
-          <button className="burger-btn mobile-only" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-            <FaBars size={20} />
-          </button>
-          <span>HI, SUPERADMIN!</span>
-        </div>
+        <span className="welcome-text">HI, SUPERADMIN!</span>
 
         <div className="stats">
           <div className="stat-box">

@@ -6,22 +6,14 @@
 
 .sidebar {
   background-color: #fde8a3;
-  width: 220px;
+  width: 250px;
   padding: 15px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
-.sidebar-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: bold;
-}
-.sidebar-logo {
-  width: 40px;
-  height: auto;
-}
+
+
 .nav-links button {
   display: flex;
   align-items: center;
@@ -66,13 +58,36 @@
   justify-content: space-between;
   margin-bottom: 12px;
 }
+
+.toolbar-right {
+  display: flex;
+  gap: 8px; /* jarak antara select dan button */
+}
+
 .search-input {
   padding: 6px 10px;
-  border: 1px solid #333;
+  font-size: 14px;
+  flex: 0 0 50%; /* lebar 50% */
+  max-width: 30%;
 }
+
 .filter-select {
   padding: 6px 10px;
   border: 1px solid #333;
+  background-color: #fde8a3;
+}
+
+.add-button {
+  padding: 6px 12px;
+  background-color: #fde8a3;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.add-button:hover {
+  background-color: #f6d779;
 }
 
 /* Table */
@@ -84,15 +99,18 @@
   width: 100%;
   border-collapse: collapse;
   background: #fff3cc;
+  table-layout: auto; /* biar kolom menyesuaikan konten */
+  border: 2px solid #333; 
 }
 .data-table th,
 .data-table td {
   border: 1px solid #ccc;
   padding: 8px;
   text-align: center;
+    border: 1px solid #333; /* garis antar sel */
 }
 .data-table th {
-  background: #fcd062;
+  background: #f9ae27;
   font-weight: bold;
 }
 
@@ -101,6 +119,7 @@
   gap: 6px;
   justify-content: center;
 }
+
 .approve-btn {
   background: #4caf50;
   color: white;
@@ -109,6 +128,7 @@
   border-radius: 6px;
   cursor: pointer;
   font-size: 13px;
+  
 }
 .reject-btn {
   background: #fdecec;
@@ -119,6 +139,7 @@
   cursor: pointer;
   font-size: 13px;
 }
+
 .status-badge {
   padding: 6px 12px;
   border-radius: 6px;
@@ -137,3 +158,15 @@
   background: #fff3cd;
   color: #856404;
 }
+
+.approve-btn,
+.reject-btn {
+  white-space: nowrap;   /* cegah teks patah */
+  min-width: 70px;       /* kasih lebar minimal */
+  text-align: center;    /* biar rata tengah */
+}
+
+.action-buttons button {
+  display: inline-block;
+}
+

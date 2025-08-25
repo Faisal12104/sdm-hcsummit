@@ -4,14 +4,6 @@
   font-family: sans-serif;
 }
 
-.header-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px;
-  background-color: #f6d779;
-}
-
 .struktur {
   width: 200%;               /* 200% biasanya tidak direkomendasikan */
   max-width: 800px;          /* Gambar tidak akan lebih dari 500px */
@@ -30,23 +22,21 @@
   transition: width 0.3s ease, transform 0.3s ease;
 }
 
-.sidebar-logo{
-  width: 100%;
-  max-width: 40px;  /* batas maksimal ukuran agar tidak terlalu besar */
+.sidebar-logo {
+  width: 50px; /* ukuran tetap */
   height: auto;
-  display: block;
-  margin: 0 auto;
+  transition: none; /* hilangkan efek shrink saat sidebar collapse */
+  object-fit: contain; /* biar proporsional */
 }
 
-
-/* Collapsed sidebar (mini mode) di desktop */
+/* Jika sidebar collapse, jangan ubah logo */
 .sidebar.collapsed {
-  width: 60px;
+  width: 80px; /* tetap sama */
 }
+
 
 /* Nav link text hilang saat collapsed */
-.sidebar.collapsed .nav-links button span,
-.sidebar.collapsed .sidebar-header span {
+.sidebar.collapsed .nav-links button span{
   display: none;
 }
 
@@ -54,20 +44,21 @@
   display: none;
 }
 
-.sidebar.collapsed .sidebar-logo {
-  display: none;
-}
-
-
 /* Sidebar header */
 .sidebar-header {
   display: flex;
   align-items: center;
-  font-size: 20px;
+  gap: 10px;
+  font-size: 16px;
   padding: 10px 16px;
   border-bottom: 1px solid #f6d779;
+  font-weight: bold;
+  white-space: nowrap; /* cegah teks patah */
 }
 
+.sidebar-header span {
+  line-height: 1; /* teks tetap sejajar */
+}
 
 /* Nav links */
 .nav-links {
@@ -122,7 +113,6 @@
   margin-left: 8px;
 }
 
-/* Ensure sidebar has higher z-index than footer */
 
 /* Burger btn */
 .burger-btn {
@@ -161,6 +151,10 @@
   align-items: center;    /* biar rata tengah vertikal */
 }
 
+
+.header-right span {
+  font-weight: bold;
+}
 
 .stats {
   display: flex;

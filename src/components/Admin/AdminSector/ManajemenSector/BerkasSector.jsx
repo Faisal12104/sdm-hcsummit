@@ -123,15 +123,6 @@ const BerkasSector = () => {
           <div className="manajemen-content">
             {error && <div className="error-message">{error}</div>}
             
-            <div className="toolbar">
-              <input
-                type="text"
-                placeholder="Cari berkas..."
-                className="search-input"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
 
             {isLoading ? (
               <div className="loading-indicator">Memuat data berkas...</div>
@@ -171,16 +162,13 @@ const BerkasSector = () => {
                               onClick={() => handleEdit(berkas.id)}
                               disabled={isLoading}
                             >
-                              <FaEdit /> Approve
+                              <FaEdit />
                             </button>
                           </td>
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="4" style={{ textAlign: 'center' }}>
-                          {searchTerm ? 'Tidak ada berkas yang sesuai' : 'Tidak ada data berkas'}
-                        </td>
                       </tr>
                     )}
                   </tbody>

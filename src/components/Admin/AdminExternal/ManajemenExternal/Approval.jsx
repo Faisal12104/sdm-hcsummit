@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import {
   FaUser,
@@ -13,42 +13,51 @@ import esdmLogo from '../../../../assets/Logo_Kementerian_ESDM.png';
 
 const Approval = () => {
   const navigate = useNavigate();
-  const [isCollapsed, setIsCollapsed] = useState(false); 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // State untuk data API
-  const [users, setUsers] = useState([]);
+  const [user, setUser] = useState(null);
   const [files, setFiles] = useState([]);
 
-  // Ambil token login dari localStorage
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
+  const storedUser = localStorage.getItem("user");
 
-  // Panggil API saat komponen load
   useEffect(() => {
-    // Contoh endpoint API (ganti sesuai backend kamu)
-    fetch('http://localhost:3000/api/user', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(res => res.json())
-      .then(data => setUsers(data))
-      .catch(err => console.error(err));
+    // 🔑 Ambil user dari localStorage (bukan fetch lagi)
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
 
-    fetch('http://localhost:3000/api/berkas', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(res => res.json())
-      .then(data => setFiles(data))
-      .catch(err => console.error(err));
-  }, [token]);
+    // 🔑 Ambil data berkas berdasarkan user.id
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      fetch(`http://localhost:3000/api/berkas/berkas/mine?id_user=${parsedUser.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then(res => res.json())
+        .then(result => {
+          console.log("Berkas API result:", result);
+          if (result && result.data) {
+            setFiles(result.data);
+          }
+        })
+        .catch(err => console.error(err));
+    }
+  }, [token, storedUser]);
 
   const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     navigate('/');
+  };
+
+  const formatDate = (isoDate) => {
+    const date = new Date(isoDate);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
   };
 
   return (
@@ -64,17 +73,17 @@ const Approval = () => {
         </div>
 
         <nav className="nav-links">
-          <button onClick={() => navigate('/AdminExternal')}>
-            <FaUser />
-            <span>Profile</span>
-          </button>
           <button onClick={() => navigate('/upload')}>
             <FaUpload />
             <span>Upload Berkas</span>
           </button>
           <button className="active-link" onClick={() => navigate('/approval')}>
             <FaCheckCircle />
-            <span>Approval</span>
+            <span>Status Berkas</span>
+          </button>
+          <button onClick={() => navigate('/AdminExternal')}>
+            <FaUser />
+            <span>Profil</span>
           </button>
         </nav>
 
@@ -90,42 +99,36 @@ const Approval = () => {
           <button className="burger-btn mobile-only" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
             <FaBars size={20} />
           </button>
-          <span>HI, External!</span>
+          <span className="header-title">HI, EKSTERNAL!</span>
         </div>
 
         <div className="content-wrapper">
-          {/* Approval User Table */}
+          {/* Tabel User */}
           <div className="approval-table">
-            <h2>Data Pengguna</h2>
             <table>
               <thead>
                 <tr>
                   <th>ID</th>
                   <th>EMAIL</th>
                   <th>SEKTOR</th>
-                  <th>STATUS</th>
+                  <th>KATEGORI</th>
                 </tr>
               </thead>
               <tbody>
-                {users.map((user) => (
-                  <tr key={user.id}>
+                {user && (
+                  <tr>
                     <td>{user.id}</td>
                     <td>{user.email}</td>
                     <td>{user.sektor}</td>
-                    <td>
-                      <span className={`status ${user.status.toLowerCase()}`}>
-                        {user.status}
-                      </span>
-                    </td>
+                    <td>{user.role}</td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
 
-          {/* Approval File Table */}
+          {/* Tabel Berkas */}
           <div className="approval-table">
-            <h2>Data Berkas</h2>
             <table>
               <thead>
                 <tr>
@@ -137,12 +140,18 @@ const Approval = () => {
               <tbody>
                 {files.map((file) => (
                   <tr key={file.id}>
-                    <td>{file.nama}</td>
-                    <td>{file.tanggal_upload}</td>
+                    <td>{file.nama_file}</td>
+                    <td>{formatDate(file.tanggal_upload)}</td>
                     <td>
-                      <span className={`status ${file.status.toLowerCase()}`}>
-                        {file.status}
-                      </span>
+                      {file.status === 'Approve' && (
+                        <span className="status-label approve">Approve</span>
+                      )}
+                      {file.status === 'Rejected' && (
+                        <span className="status-label reject">Rejected</span>
+                      )}
+                      {file.status === 'Waiting' && (
+                        <span className="status-label waiting">Waiting</span>
+                      )}
                     </td>
                   </tr>
                 ))}

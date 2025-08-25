@@ -14,6 +14,16 @@
   min-height: 0;
 }
 
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  font-size: 17px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #f6d779;
+  font-weight: bold;
+  gap: 10px;
+}
+
 .header-top {
   text-align: right;
   font-weight: bold;
@@ -21,7 +31,6 @@
 }
 
 .manajemen-content {
-  background-color: #fde8a3;
   padding: 16px;
   border-radius: 8px;
   flex: 1; /* NEW: isi ruang kosong, dorong footer ke bawah */
@@ -38,9 +47,12 @@
 
 .search-input {
   padding: 6px 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  font-size: 14px;
+  flex: 0 0 50%; /* lebar 50% */
+  max-width: 50%;
 }
+
+
 
 
 .table-wrapper {
@@ -66,6 +78,8 @@ min-width: 600px;
   font-weight: bold;
 }
 
+
+
 .icon-btn {
   background: none;
   border: none;
@@ -77,6 +91,7 @@ min-width: 600px;
 
 .icon-btn:last-child {
   margin-right: 0;
+  color: black;       /* ✅ ikon hitam */
 }
 
 /* Responsive toolbar */

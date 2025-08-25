@@ -56,20 +56,36 @@ const handleLogin = async (e) => {
     console.log("Login Response:", result);
 
     if (response.ok) {
-      // Simpan user ke localStorage
+      // 🔑 Simpan data login lengkap ke localStorage
+      const userData = {
+        id: result.user.id,
+        nama_lengkap: result.user.nama_lengkap,
+        username: result.user.username,
+        email: result.user.email,
+        role: result.user.role,
+        id_jabatan: result.user.id_jabatan,
+        jabatan: result.user.jabatan,
+        id_perusahaan: result.user.id_perusahaan,
+        perusahaan: result.user.perusahaan,
+        id_sektor: result.user.id_sektor,
+        sektor: result.user.sektor,
+        id_tipe: result.user.id_tipe ?? 1, // default 1 bila backend tidak ada
+      };
+
       localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("user", JSON.stringify(result.user));
+      localStorage.setItem("user", JSON.stringify(userData));
 
       // --- Normalisasi role ---
       let roleStr = result.user.role?.toLowerCase() || "";
-      roleStr = roleStr.replace(/_/g, " "); // "admin_satuan_kerja" → "admin satuan kerja"
+      roleStr = roleStr.replace(/_/g, " "); 
 
       // --- Mapping role → route ---
       const roleMapping = {
         "superadmin": "/SuperAdmin",
         "admin sektor": "/AdminSector",
         "admin eksternal": "/AdminExternal",
-        "admin satuan kerja": "/AdminSector", // 🔑 langsung arahkan ke AdminSector
+        "admin satuan kerja": "/AdminSector", 
+        "eksternal": "/AdminExternal",
       };
 
       const targetRoute = roleMapping[roleStr] || "/";
@@ -88,7 +104,6 @@ const handleLogin = async (e) => {
     setShowPopup(true);
   }
 };
-
   // -------------------- HANDLE REGISTER --------------------
   const handleRegister = async (e) => {
     e.preventDefault();
