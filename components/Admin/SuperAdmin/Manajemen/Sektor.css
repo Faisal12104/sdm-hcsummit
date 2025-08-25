@@ -1,0 +1,108 @@
+.dashboard-sektoradmin {
+  display: flex;
+  height: 100vh;
+  font-family: sans-serif;
+  min-height: 0;
+}
+
+.manajemen-container {
+  flex: 1;
+  background-color: #f9ae27;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  min-height: 0;
+}
+
+.header-top {
+  text-align: right;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.manajemen-content {
+  padding: 16px;
+  border-radius: 8px;
+  flex: 1; /* NEW: isi ruang kosong, dorong footer ke bawah */
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.search-input {
+  padding: 6px 10px;
+  font-size: 14px;
+  flex: 0 0 50%; /* lebar 50% */
+  max-width: 50%;
+}
+
+
+.add-btn {
+  background-color: #f7c02d;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff3cc;
+  table-layout: fixed;
+  word-wrap: break-word;
+}
+
+.data-table th,
+.data-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border: 1px solid #e2c267;
+  word-break: break-word;
+  min-width: 0;
+}
+
+.data-table th {
+  background-color: #fcd062;
+  font-weight: bold;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 6px;
+  color: #333;
+  font-size: 16px;
+}
+
+.icon-btn:last-child {
+  margin-right: 0;
+}
+
+/* Responsive toolbar */
+@media (max-width: 600px) {
+  .toolbar {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .add-btn {
+    width: 100%;
+  }
+}

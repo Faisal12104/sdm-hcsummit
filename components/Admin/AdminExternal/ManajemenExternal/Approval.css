@@ -1,0 +1,73 @@
+.dashboard-approval {
+  display: flex;
+  height: 100vh;
+  font-family: sans-serif;
+  min-height: 0;
+}
+
+.desktop-only {
+  display: none;
+}
+
+.mobile-only {
+  display: block;
+}
+
+/* Approval Table Wrapper */
+.approval-table {
+  background: white;
+  margin: 20px auto;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 1000px;
+  overflow-x: auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Style */
+.approval-table table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.approval-table th,
+.approval-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #ddd;
+  
+}
+
+.approval-table th {
+  background-color: #f2d178;
+  color: white;
+}
+
+/* Status Labels */
+.status {
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.status.approved {
+  background-color: #4caf50;
+  color: white;
+}
+
+.status.rejected {
+  background-color: white;
+  color: #c53030;
+}
+
+/* Responsive Media Queries */
+@media (min-width: 768px) {
+  .desktop-only {
+    display: block;
+  }
+
+  .mobile-only {
+    display: none;
+  }
+}

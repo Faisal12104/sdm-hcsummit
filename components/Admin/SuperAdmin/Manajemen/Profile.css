@@ -1,0 +1,179 @@
+.dashboard-profileadmin {
+  display: flex;
+  height: 100vh;
+  font-family: sans-serif;
+  min-height: 0;
+}
+
+.profile-container {
+  background-color: #f9ae27;
+  padding: 24px;
+  font-family: sans-serif;
+  color: #000;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+}
+
+.profile-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.profile-name {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.profile-email {
+  font-size: 14px;
+  color: #333;
+}
+
+.edit-btn {
+  background-color: #fff3cc;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.profile-form {
+  margin-bottom: 24px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 4px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.form-group input {
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.email-section {
+  margin-top: 16px;
+}
+
+.section-title {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.email-item {
+  display: flex;
+  align-items: center;
+  background-color: #fde8a3;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.email-icon {
+  margin-right: 8px;
+  color: #f7c02d;
+  font-size: 18px;
+}
+
+.email-text {
+  font-weight: bold;
+}
+
+.email-date {
+  font-size: 12px;
+  color: #555;
+}
+
+.add-email-btn {
+  background-color: #f7c02d;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 4px;
+}
+
+/* Profile action buttons */
+.profile-header .edit-btn,
+.profile-header .save-btn,
+.profile-header .cancel-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 8px; /* jarak antar tombol */
+  transition: background-color 0.2s ease;
+}
+
+/* Edit button */
+.profile-header .edit-btn {
+  background-color: #fcd062;
+  color: #000;
+}
+
+.profile-header .edit-btn:hover {
+  background-color: #fbc22f;
+}
+
+/* Save button */
+.profile-header .save-btn {
+  background-color: #4caf50; /* hijau */
+  color: #fff;
+}
+
+.profile-header .save-btn:hover {
+  background-color: #45a049;
+}
+
+/* Cancel button */
+.profile-header .cancel-btn {
+  background-color: #f44336; /* merah */
+  color: #fff;
+}
+
+.profile-header .cancel-btn:hover {
+  background-color: #d32f2f;
+}
+
+/* Container untuk tombol agar tetap sejajar */
+.profile-header button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+}
+
+

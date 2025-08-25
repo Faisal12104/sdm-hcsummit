@@ -1,0 +1,156 @@
+.dashboard-berkasadmin {
+  display: flex;
+  height: 100vh;
+  font-family: sans-serif;
+  min-height: 0;
+}
+
+/* Kontainer utama */
+.manajemen-container {
+  flex: 1;
+  background-color: #f9ae27;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  min-height: 0;
+}
+
+.header-top {
+  text-align: right;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.manajemen-content {
+  padding: 16px;
+  border-radius: 8px;
+  flex: 1; /* isi ruang kosong, dorong footer ke bawah */
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.search-input {
+  padding: 6px 10px;
+  font-size: 14px;
+  flex: 0 0 50%; /* lebar 50% */
+  max-width: 50%;
+}
+
+
+.add-btn {
+  background-color: #f7c02d;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.add-btn:hover {
+  background-color: #e6ad10;
+}
+
+/* Table */
+.table-wrapper {
+  flex: 1;
+  overflow-x: auto;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff3cc;
+  table-layout: fixed;
+  word-wrap: break-word;
+}
+
+.data-table th,
+.data-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border: 1px solid #e2c267;
+  word-break: break-word;
+  min-width: 0;
+}
+
+.data-table th {
+  background-color: #fcd062;
+  font-weight: bold;
+}
+
+/* Tombol ikon */
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 6px;
+  color: #333;
+  font-size: 16px;
+  transition: color 0.2s ease;
+}
+
+.icon-btn:hover {
+  color: #000;
+}
+
+.icon-btn:last-child {
+  margin-right: 0;
+}
+
+/* Animasi table container */
+.table-container {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.table-container.hidden {
+  opacity: 0;
+  transform: scale(0.98);
+  pointer-events: none;
+}
+
+.table-container.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Responsive toolbar */
+@media (max-width: 600px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .add-btn {
+    width: 100%;
+  }
+}
+
+select {
+  border: none;
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  background-color: #f7c02d
+  ;
+}
+
+select:hover {
+  border-color: #4caf50;
+}

@@ -1,0 +1,110 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 50px;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo-image {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* HANYA INI YANG DIUBAH */
+.logo-separator {
+  color: #000; /* Warna hitam */
+  font-size: 24px; /* Ukuran sama dengan logo */
+  font-weight: 600; /* Ketebalan font */
+  margin-left: 10px;
+}
+
+.nav a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav a:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    padding: 15px;
+    position: sticky;
+  }
+  
+  .logo-container {
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .logo-image {
+    height: 35px;
+  }
+  
+  .logo-separator {
+    font-size: 20px; /* Ukuran disesuaikan untuk mobile */
+    margin-left: 0;
+  }
+  
+  .nav {
+    margin-top: 15px;
+  }
+  
+  .nav a {
+    margin: 0 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-image {
+    height: 30px;
+  }
+  
+  .logo-separator {
+    font-size: 18px; /* Ukuran disesuaikan untuk mobile kecil */
+  }
+  
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .nav a {
+    margin: 0 5px;
+  }
+}
+
+.nav a, .nav-link {
+  margin-left: 20px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav a:hover, .nav-link:hover {
+  color: #000;
+  text-decoration: underline;
+}

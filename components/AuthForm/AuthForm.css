@@ -1,0 +1,247 @@
+.landing-page {
+  background-color: #FFB823;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Auth Page Layout */
+.auth-page {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+/* Container */
+.auth-container {
+  background-color: #fff;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  max-width: 460px;
+  text-align: center;
+}
+
+/* Logo */
+.auth-logo-container {
+  margin-bottom: 25px;
+}
+
+.auth-logo {
+  height: 85px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* Title & Subtitle */
+.auth-title {
+  font-size: 26px;
+  margin-bottom: 8px;
+  color: #222;
+  font-weight: 700;
+}
+
+.auth-subtitle {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 28px;
+  line-height: 1.4;
+}
+
+/* Tab Title */
+.auth-active-tab-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 18px;
+  text-transform: uppercase;
+}
+
+/* Form */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Input Group */
+.auth-input-group {
+  text-align: left;
+}
+
+.auth-input-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #444;
+  font-weight: 500;
+}
+
+.auth-input {
+  padding: 12px 11px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 100%;             /* penuh kalau single */
+  flex: 1;                 /* bisa fleksibel kalau dalam flex container */
+  min-width: 0;            /* biar nggak meledak saat flex */
+  transition: all 0.3s ease;
+}
+
+.auth-input:focus {
+  border-color: #FFB823;
+  box-shadow: 0 0 0 2px rgba(255, 184, 35, 0.2);
+  outline: none;
+}
+
+.auth-input:focus {
+  border-color: #FFB823;
+  box-shadow: 0 0 0 2px rgba(255, 184, 35, 0.2);
+  outline: none;
+}
+
+/* Password Toggle */
+.password-input-container {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #777;
+  background: none;
+  border: none;
+  font-size: 16px;
+  padding: 5px;
+  transition: color 0.3s;
+}
+
+.password-toggle:hover {
+  color: #222;
+}
+
+/* Button */
+.auth-button {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+  width: 100%;
+}
+
+.auth-button:hover {
+  background-color: #000;
+  transform: translateY(-1px);
+}
+
+.auth-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Switch Text */
+.auth-switch-text {
+  margin-top: 18px;
+  font-size: 14px;
+  color: #666;
+}
+
+.auth-switch-link {
+  color: #FFB823;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.auth-switch-link:hover {
+  text-decoration: underline;
+}
+
+/* Terms Checkbox */
+.terms-checkbox-group {
+  display: flex;
+  align-items: center;
+  margin: 15px 0;
+  text-align: left;
+}
+
+.terms-checkbox-group input[type="checkbox"] {
+  margin-right: 10px;
+  width: 16px;
+  height: 16px;
+  accent-color: #FFB823;
+}
+
+.terms-checkbox-group label {
+  font-size: 14px;
+  color: #444;
+  cursor: pointer;
+}
+
+.terms-link {
+  color: #FFB823;
+  font-weight: 600;
+}
+
+.terms-link:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .auth-container {
+    padding: 25px 18px;
+  }
+  
+  .auth-title {
+    font-size: 22px;
+  }
+  
+  .auth-subtitle {
+    font-size: 14px;
+  }
+  
+  .auth-active-tab-title {
+    font-size: 16px;
+    margin-bottom: 14px;
+  }
+  
+  .auth-input {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+  
+  .auth-input-label {
+    font-size: 13px;
+  }
+  
+  .auth-button {
+    padding: 12px;
+    font-size: 15px;
+  }
+  
+  .auth-switch-text {
+    font-size: 13px;
+  }
+  
+  .password-toggle {
+    font-size: 14px;
+  }
+  
+  .terms-checkbox-group label {
+    font-size: 13px;
+  }
+}
